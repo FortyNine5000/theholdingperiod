@@ -2,49 +2,489 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3);
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			/* ── Hero ─────────────────────────────── */
+			.hero {
+				background: var(--bg-subtle);
+				border-bottom: 1px solid var(--border);
+				padding: 6em 1.5em 5em;
+				text-align: center;
+			}
+
+			.hero-eyebrow {
+				font-family: var(--font-sans);
+				font-size: 0.78em;
+				font-weight: 700;
+				letter-spacing: 0.14em;
+				text-transform: uppercase;
+				color: var(--accent-muted);
+				margin-bottom: 1.25em;
+			}
+
+			.hero h1 {
+				font-family: var(--font-serif);
+				font-size: clamp(2.4em, 5vw, 3.6em);
+				font-weight: normal;
+				line-height: 1.15;
+				color: var(--text);
+				max-width: 780px;
+				margin: 0 auto 0.6em;
+			}
+
+			.hero-sub {
+				font-size: 1.15em;
+				color: var(--text-secondary);
+				max-width: 560px;
+				margin: 0 auto 2.25em;
+				line-height: 1.7;
+			}
+
+			.hero-actions {
+				display: flex;
+				gap: 1em;
+				justify-content: center;
+				flex-wrap: wrap;
+			}
+
+			/* ── Stats bar ─────────────────────────── */
+			.stats-bar {
+				background: var(--accent);
+				color: white;
+				padding: 0;
+			}
+
+			.stats-inner {
+				max-width: 1100px;
+				margin: 0 auto;
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				divide-x: 1px solid rgba(255,255,255,0.12);
+			}
+
+			.stat-item {
+				padding: 1.75em 2em;
+				border-right: 1px solid rgba(255,255,255,0.12);
+				text-align: center;
+			}
+
+			.stat-item:last-child {
+				border-right: none;
+			}
+
+			.stat-value {
+				font-family: var(--font-serif);
+				font-size: 2em;
+				font-weight: normal;
+				line-height: 1;
+				margin-bottom: 0.3em;
+				color: #fff;
+			}
+
+			.stat-label {
+				font-family: var(--font-sans);
+				font-size: 0.78em;
+				color: rgba(255,255,255,0.75);
+				line-height: 1.4;
+			}
+
+			/* ── Section headings ──────────────────── */
+			.section {
+				max-width: 1100px;
+				margin: 0 auto;
+				padding: 4.5em 1.5em;
+			}
+
+			.section-header {
+				display: flex;
+				align-items: baseline;
+				justify-content: space-between;
+				margin-bottom: 2em;
+				padding-bottom: 1em;
+				border-bottom: 2px solid var(--accent);
+			}
+
+			.section-title {
+				font-family: var(--font-serif);
+				font-size: 1.6em;
+				font-weight: normal;
+				color: var(--text);
+				margin: 0;
+			}
+
+			.section-link {
+				font-size: 0.88em;
+				font-family: var(--font-sans);
+				color: var(--accent);
+				text-decoration: none;
+				font-weight: 600;
+			}
+
+			.section-link:hover {
+				text-decoration: underline;
+			}
+
+			/* ── Research cards ────────────────────── */
+			.research-grid {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 1.5em;
+			}
+
+			.research-card {
+				background: var(--bg);
+				border: 1px solid var(--border);
+				border-radius: 6px;
+				padding: 1.75em;
+				display: flex;
+				flex-direction: column;
+				transition: box-shadow 0.2s ease, transform 0.2s ease;
+				text-decoration: none;
+			}
+
+			.research-card:hover {
+				box-shadow: var(--box-shadow-hover);
+				transform: translateY(-2px);
+				text-decoration: none;
+			}
+
+			.card-date {
+				font-family: var(--font-sans);
+				font-size: 0.78em;
+				color: var(--text-muted);
+				letter-spacing: 0.03em;
+				margin-bottom: 0.75em;
+			}
+
+			.card-title {
+				font-family: var(--font-serif);
+				font-size: 1.2em;
+				line-height: 1.3;
+				color: var(--text);
+				margin: 0 0 0.75em 0;
+				font-weight: normal;
+			}
+
+			.card-desc {
+				font-size: 0.9em;
+				color: var(--text-secondary);
+				line-height: 1.6;
+				margin: 0;
+				flex-grow: 1;
+			}
+
+			.card-cta {
+				margin-top: 1.25em;
+				font-family: var(--font-sans);
+				font-size: 0.85em;
+				font-weight: 600;
+				color: var(--accent);
+			}
+
+			/* ── Data preview ──────────────────────── */
+			.data-section {
+				background: var(--bg-subtle);
+				border-top: 1px solid var(--border);
+				border-bottom: 1px solid var(--border);
+			}
+
+			.data-grid {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				gap: 1.5em;
+			}
+
+			.data-card {
+				background: var(--bg);
+				border: 1px solid var(--border);
+				border-radius: 6px;
+				padding: 1.75em;
+			}
+
+			.data-card-title {
+				font-family: var(--font-sans);
+				font-size: 0.78em;
+				font-weight: 700;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+				color: var(--text-muted);
+				margin-bottom: 1.25em;
+			}
+
+			.data-table {
+				width: 100%;
+				border-collapse: collapse;
+				font-size: 0.88em;
+			}
+
+			.data-table th {
+				font-family: var(--font-sans);
+				font-size: 0.8em;
+				font-weight: 600;
+				letter-spacing: 0.06em;
+				text-transform: uppercase;
+				color: var(--text-muted);
+				padding: 0.4em 0.75em;
+				text-align: left;
+				border-bottom: 2px solid var(--border);
+			}
+
+			.data-table td {
+				padding: 0.55em 0.75em;
+				border-bottom: 1px solid var(--border-light);
+				color: var(--text-secondary);
+				font-variant-numeric: tabular-nums;
+			}
+
+			.data-table tr:last-child td {
+				border-bottom: none;
+			}
+
+			.positive { color: #276749; font-weight: 600; }
+			.negative { color: #c53030; font-weight: 600; }
+
+			.data-cta {
+				margin-top: 1.25em;
+				text-align: right;
+			}
+
+			/* ── Newsletter strip ──────────────────── */
+			.newsletter-strip {
+				background: var(--accent);
+				padding: 4em 1.5em;
+			}
+
+			.newsletter-inner {
+				max-width: 640px;
+				margin: 0 auto;
+				text-align: center;
+			}
+
+			.newsletter-inner h2 {
+				font-family: var(--font-serif);
+				font-size: 2em;
+				color: #ffffff;
+				margin-bottom: 0.4em;
+				font-weight: normal;
+			}
+
+			.newsletter-inner p {
+				color: rgba(255,255,255,0.82);
+				margin-bottom: 1.75em;
+				font-size: 1.05em;
+			}
+
+			.newsletter-form {
+				display: flex;
+				gap: 0.75em;
+				max-width: 440px;
+				margin: 0 auto;
+			}
+
+			.newsletter-form input[type="email"] {
+				flex: 1;
+				padding: 0.75em 1em;
+				border: 1.5px solid rgba(255,255,255,0.3);
+				border-radius: 4px;
+				background: rgba(255,255,255,0.1);
+				color: white;
+				font-size: 0.95em;
+				outline: none;
+				transition: border-color 0.15s ease;
+			}
+
+			.newsletter-form input[type="email"]::placeholder {
+				color: rgba(255,255,255,0.55);
+			}
+
+			.newsletter-form input[type="email"]:focus {
+				border-color: rgba(255,255,255,0.6);
+				background: rgba(255,255,255,0.15);
+			}
+
+			.newsletter-form button {
+				padding: 0.75em 1.5em;
+				background: #ffffff;
+				color: var(--accent);
+				border: none;
+				border-radius: 4px;
+				font-weight: 700;
+				font-size: 0.9em;
+				cursor: pointer;
+				white-space: nowrap;
+				transition: opacity 0.15s ease;
+			}
+
+			.newsletter-form button:hover {
+				opacity: 0.9;
+			}
+
+			.newsletter-note {
+				margin-top: 1em;
+				font-size: 0.8em;
+				color: rgba(255,255,255,0.55);
+			}
+
+			@media (max-width: 900px) {
+				.research-grid { grid-template-columns: 1fr; }
+				.data-grid { grid-template-columns: 1fr; }
+				.stats-inner { grid-template-columns: repeat(2, 1fr); }
+				.stat-item:nth-child(2) { border-right: none; }
+			}
+
+			@media (max-width: 600px) {
+				.hero { padding: 4em 1em 3em; }
+				.stats-inner { grid-template-columns: repeat(2, 1fr); }
+				.newsletter-form { flex-direction: column; }
+				.section { padding: 3em 1em; }
+			}
+		</style>
 	</head>
 	<body>
 		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
+
+		<!-- Hero -->
+		<section class="hero">
+			<p class="hero-eyebrow">Long-Term Market Research</p>
+			<h1>The Long View on Markets</h1>
+			<p class="hero-sub">
+				Institutional-grade research and data for investors committed to multi-decade time horizons. Because the most powerful force in investing is patience.
 			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
+			<div class="hero-actions">
+				<a href="/research" class="btn btn-primary">Browse Research</a>
+				<a href="/newsletter" class="btn btn-outline">Subscribe Free</a>
+			</div>
+		</section>
+
+		<!-- Stats Bar -->
+		<div class="stats-bar">
+			<div class="stats-inner">
+				<div class="stat-item">
+					<div class="stat-value">~10.5%</div>
+					<div class="stat-label">Avg. Annual Return<br>S&amp;P 500, 1926–2024</div>
+				</div>
+				<div class="stat-item">
+					<div class="stat-value">~7.0%</div>
+					<div class="stat-label">Real CAGR<br>Inflation-adjusted</div>
+				</div>
+				<div class="stat-item">
+					<div class="stat-value">20 yr</div>
+					<div class="stat-label">Rolling periods<br>Never historically negative</div>
+				</div>
+				<div class="stat-item">
+					<div class="stat-value">98 yr</div>
+					<div class="stat-label">Dataset depth<br>Continuous market data</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Featured Research -->
+		<div class="section">
+			<div class="section-header">
+				<h2 class="section-title">Featured Research</h2>
+				<a href="/research" class="section-link">View all research &rarr;</a>
+			</div>
+			<div class="research-grid">
+				{posts.map((post) => (
+					<a href={`/research/${post.id}/`} class="research-card">
+						<div class="card-date">
+							<FormattedDate date={post.data.pubDate} />
+						</div>
+						<h3 class="card-title">{post.data.title}</h3>
+						<p class="card-desc">{post.data.description}</p>
+						<span class="card-cta">Read analysis &rarr;</span>
+					</a>
+				))}
+			</div>
+		</div>
+
+		<!-- Data Preview -->
+		<div class="data-section">
+			<div class="section">
+				<div class="section-header">
+					<h2 class="section-title">Market Data at a Glance</h2>
+					<a href="/data" class="section-link">Full data center &rarr;</a>
+				</div>
+				<div class="data-grid">
+					<div class="data-card">
+						<div class="data-card-title">S&amp;P 500 Returns by Decade</div>
+						<table class="data-table">
+							<thead>
+								<tr>
+									<th>Decade</th>
+									<th>Price Return</th>
+									<th>Total Return</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td>1950s</td><td class="positive">+13.6%</td><td class="positive">+19.4%</td></tr>
+								<tr><td>1960s</td><td class="positive">+4.4%</td><td class="positive">+7.8%</td></tr>
+								<tr><td>1970s</td><td class="positive">+1.6%</td><td class="positive">+5.9%</td></tr>
+								<tr><td>1980s</td><td class="positive">+12.6%</td><td class="positive">+17.5%</td></tr>
+								<tr><td>1990s</td><td class="positive">+15.3%</td><td class="positive">+18.2%</td></tr>
+								<tr><td>2000s</td><td class="negative">−2.7%</td><td class="negative">−1.0%</td></tr>
+								<tr><td>2010s</td><td class="positive">+11.2%</td><td class="positive">+13.6%</td></tr>
+							</tbody>
+						</table>
+						<div class="data-cta">
+							<a href="/data" class="section-link">Explore full dataset &rarr;</a>
+						</div>
+					</div>
+					<div class="data-card">
+						<div class="data-card-title">Holding Period Win Rates (S&amp;P 500, 1926–2024)</div>
+						<table class="data-table">
+							<thead>
+								<tr>
+									<th>Holding Period</th>
+									<th>% Positive</th>
+									<th>Worst Period</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr><td>1 Year</td><td class="positive">73%</td><td class="negative">−43.3%</td></tr>
+								<tr><td>3 Years</td><td class="positive">84%</td><td class="negative">−27.8%</td></tr>
+								<tr><td>5 Years</td><td class="positive">88%</td><td class="negative">−12.5%</td></tr>
+								<tr><td>10 Years</td><td class="positive">95%</td><td class="negative">−4.9%</td></tr>
+								<tr><td>15 Years</td><td class="positive">99%</td><td class="negative">−1.2%</td></tr>
+								<tr><td>20 Years</td><td class="positive">100%</td><td class="positive">+3.1%</td></tr>
+								<tr><td>30 Years</td><td class="positive">100%</td><td class="positive">+8.4%</td></tr>
+							</tbody>
+						</table>
+						<div class="data-cta">
+							<a href="/data" class="section-link">Explore full dataset &rarr;</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Newsletter -->
+		<div class="newsletter-strip">
+			<div class="newsletter-inner">
+				<h2>Think in Decades</h2>
+				<p>
+					Receive our research directly. No noise, no market timing calls — just rigorous long-term analysis delivered monthly.
+				</p>
+				<form class="newsletter-form" action="/newsletter" method="get">
+					<input type="email" name="email" placeholder="your@email.com" required />
+					<button type="submit">Subscribe</button>
+				</form>
+				<p class="newsletter-note">Free. No spam. Unsubscribe anytime.</p>
+			</div>
+		</div>
+
 		<Footer />
 	</body>
 </html>

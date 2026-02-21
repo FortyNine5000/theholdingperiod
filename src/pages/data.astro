@@ -1,0 +1,320 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title="Data — The Holding Period"
+			description="Historical equity market data, long-term return tables, CAPE ratios, and holding period analysis. Over 98 years of S&P 500 data."
+		/>
+		<style>
+			.page-header {
+				background: var(--bg-subtle);
+				border-bottom: 1px solid var(--border);
+				padding: 3.5em 1.5em 2.5em;
+			}
+
+			.page-header-inner {
+				max-width: 1100px;
+				margin: 0 auto;
+			}
+
+			.page-eyebrow {
+				font-family: var(--font-sans);
+				font-size: 0.75em;
+				font-weight: 700;
+				letter-spacing: 0.12em;
+				text-transform: uppercase;
+				color: var(--accent-muted);
+				margin-bottom: 0.75em;
+			}
+
+			.page-title {
+				font-family: var(--font-serif);
+				font-size: 2.5em;
+				font-weight: normal;
+				color: var(--text);
+				margin: 0 0 0.4em 0;
+			}
+
+			.page-desc {
+				color: var(--text-secondary);
+				font-size: 1.05em;
+				max-width: 600px;
+				margin: 0;
+			}
+
+			.content {
+				max-width: 1100px;
+				margin: 0 auto;
+				padding: 3.5em 1.5em 5em;
+				display: flex;
+				flex-direction: column;
+				gap: 3.5em;
+			}
+
+			.data-section-title {
+				font-family: var(--font-serif);
+				font-size: 1.5em;
+				font-weight: normal;
+				color: var(--text);
+				margin: 0 0 0.3em 0;
+				padding-bottom: 0.6em;
+				border-bottom: 2px solid var(--accent);
+				display: flex;
+				align-items: baseline;
+				justify-content: space-between;
+			}
+
+			.data-section-desc {
+				font-size: 0.9em;
+				color: var(--text-muted);
+				margin: 0.6em 0 1.5em 0;
+				font-style: italic;
+			}
+
+			.data-table-wrapper {
+				overflow-x: auto;
+				border: 1px solid var(--border);
+				border-radius: 6px;
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				font-size: 0.9em;
+				font-variant-numeric: tabular-nums;
+			}
+
+			thead th {
+				background: var(--accent);
+				color: white;
+				font-family: var(--font-sans);
+				font-size: 0.8em;
+				font-weight: 600;
+				letter-spacing: 0.06em;
+				text-transform: uppercase;
+				padding: 0.75em 1em;
+				text-align: left;
+				white-space: nowrap;
+			}
+
+			thead th:not(:first-child) {
+				text-align: right;
+			}
+
+			tbody td {
+				padding: 0.65em 1em;
+				border-bottom: 1px solid var(--border);
+				color: var(--text-secondary);
+			}
+
+			tbody td:not(:first-child) {
+				text-align: right;
+			}
+
+			tbody tr:last-child td {
+				border-bottom: none;
+			}
+
+			tbody tr:hover td {
+				background: var(--bg-subtle);
+			}
+
+			.tfoot-row td {
+				background: var(--bg-accent);
+				font-weight: 700;
+				color: var(--text);
+				border-top: 2px solid var(--border);
+			}
+
+			.positive { color: #276749; font-weight: 600; }
+			.negative { color: #c53030; font-weight: 600; }
+			.neutral  { color: var(--text-muted); }
+
+			.highlight-row td {
+				background: var(--bg-accent);
+				font-weight: 600;
+			}
+
+			.key-metrics {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				gap: 1em;
+			}
+
+			.metric-card {
+				background: var(--bg-subtle);
+				border: 1px solid var(--border);
+				border-radius: 6px;
+				padding: 1.5em;
+				text-align: center;
+			}
+
+			.metric-value {
+				font-family: var(--font-serif);
+				font-size: 2em;
+				color: var(--accent);
+				line-height: 1;
+				margin-bottom: 0.25em;
+			}
+
+			.metric-label {
+				font-family: var(--font-sans);
+				font-size: 0.8em;
+				color: var(--text-muted);
+				line-height: 1.4;
+			}
+
+			.source-note {
+				font-size: 0.78em;
+				color: var(--text-muted);
+				font-style: italic;
+				margin-top: 0.75em;
+			}
+
+			@media (max-width: 900px) {
+				.key-metrics { grid-template-columns: repeat(2, 1fr); }
+				.page-title { font-size: 1.8em; }
+				.page-header { padding: 2em 1em 1.5em; }
+				.content { padding: 2em 1em 3em; }
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<div class="page-header">
+			<div class="page-header-inner">
+				<p class="page-eyebrow">Historical Market Data</p>
+				<h1 class="page-title">Data Center</h1>
+				<p class="page-desc">
+					Over 98 years of S&amp;P 500 returns, CAPE ratio history, and holding period analysis. All figures are annualized unless otherwise noted.
+				</p>
+			</div>
+		</div>
+
+		<div class="content">
+
+			<!-- Key Metrics -->
+			<div>
+				<h2 class="data-section-title">Key Long-Term Benchmarks</h2>
+				<p class="data-section-desc">S&amp;P 500 composite, 1926–2024. Annualized figures.</p>
+				<div class="key-metrics">
+					<div class="metric-card">
+						<div class="metric-value">10.5%</div>
+						<div class="metric-label">Nominal CAGR<br>1926–2024</div>
+					</div>
+					<div class="metric-card">
+						<div class="metric-value">7.0%</div>
+						<div class="metric-label">Real CAGR<br>Inflation-adjusted</div>
+					</div>
+					<div class="metric-card">
+						<div class="metric-value">4.2%</div>
+						<div class="metric-label">Avg. Dividend Yield<br>Historical mean</div>
+					</div>
+					<div class="metric-card">
+						<div class="metric-value">−51%</div>
+						<div class="metric-label">Maximum Drawdown<br>2007–2009</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Decade Returns -->
+			<div>
+				<h2 class="data-section-title">Annual Returns by Decade</h2>
+				<p class="data-section-desc">Total return (price + dividends reinvested), annualized per decade. Source: Robert Shiller data library, Dimensional Fund Advisors.</p>
+				<div class="data-table-wrapper">
+					<table>
+						<thead>
+							<tr>
+								<th>Decade</th>
+								<th>Price Return (Ann.)</th>
+								<th>Dividend Yield (Avg.)</th>
+								<th>Total Return (Ann.)</th>
+								<th>CPI Inflation (Ann.)</th>
+								<th>Real Total Return</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr><td>1930s</td><td class="negative">−5.3%</td><td class="positive">+5.8%</td><td class="positive">+0.5%</td><td class="negative">−2.0%</td><td class="positive">+2.5%</td></tr>
+							<tr><td>1940s</td><td class="positive">+9.2%</td><td class="positive">+5.3%</td><td class="positive">+14.5%</td><td class="negative">−5.6%</td><td class="positive">+8.9%</td></tr>
+							<tr><td>1950s</td><td class="positive">+13.6%</td><td class="positive">+5.8%</td><td class="positive">+19.4%</td><td class="negative">−2.2%</td><td class="positive">+17.2%</td></tr>
+							<tr><td>1960s</td><td class="positive">+4.4%</td><td class="positive">+3.4%</td><td class="positive">+7.8%</td><td class="negative">−2.5%</td><td class="positive">+5.3%</td></tr>
+							<tr><td>1970s</td><td class="positive">+1.6%</td><td class="positive">+4.3%</td><td class="positive">+5.9%</td><td class="negative">−7.4%</td><td class="negative">−1.5%</td></tr>
+							<tr><td>1980s</td><td class="positive">+12.6%</td><td class="positive">+4.9%</td><td class="positive">+17.5%</td><td class="negative">−5.1%</td><td class="positive">+12.4%</td></tr>
+							<tr><td>1990s</td><td class="positive">+15.3%</td><td class="positive">+2.9%</td><td class="positive">+18.2%</td><td class="negative">−2.9%</td><td class="positive">+15.3%</td></tr>
+							<tr><td>2000s</td><td class="negative">−2.7%</td><td class="positive">+1.8%</td><td class="negative">−1.0%</td><td class="negative">−2.6%</td><td class="negative">−3.6%</td></tr>
+							<tr><td>2010s</td><td class="positive">+11.2%</td><td class="positive">+2.4%</td><td class="positive">+13.6%</td><td class="negative">−1.7%</td><td class="positive">+11.9%</td></tr>
+							<tr class="tfoot-row"><td>1926–2024 Avg.</td><td class="positive">+6.3%</td><td class="positive">+4.2%</td><td class="positive">+10.5%</td><td class="negative">−3.0%</td><td class="positive">+7.5%</td></tr>
+						</tbody>
+					</table>
+				</div>
+				<p class="source-note">Note: Figures are approximate annualized returns for each decade. Real returns calculated using CPI deflator. Past performance is not indicative of future results.</p>
+			</div>
+
+			<!-- Holding Period Analysis -->
+			<div>
+				<h2 class="data-section-title">Rolling Holding Period Analysis</h2>
+				<p class="data-section-desc">Probability of positive real returns for all rolling periods of given length, 1926–2024. S&amp;P 500 total return index.</p>
+				<div class="data-table-wrapper">
+					<table>
+						<thead>
+							<tr>
+								<th>Holding Period</th>
+								<th>% Periods Positive (Nominal)</th>
+								<th>% Periods Positive (Real)</th>
+								<th>Best Period Return</th>
+								<th>Worst Period Return</th>
+								<th>Median Annualized Return</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr><td>1 Year</td><td class="positive">73%</td><td class="positive">64%</td><td class="positive">+53.4%</td><td class="negative">−43.3%</td><td class="positive">+14.8%</td></tr>
+							<tr><td>3 Years</td><td class="positive">84%</td><td class="positive">74%</td><td class="positive">+33.9%</td><td class="negative">−27.8%</td><td class="positive">+11.4%</td></tr>
+							<tr><td>5 Years</td><td class="positive">88%</td><td class="positive">79%</td><td class="positive">+28.6%</td><td class="negative">−12.5%</td><td class="positive">+10.8%</td></tr>
+							<tr><td>10 Years</td><td class="positive">95%</td><td class="positive">85%</td><td class="positive">+20.1%</td><td class="negative">−4.9%</td><td class="positive">+10.3%</td></tr>
+							<tr><td>15 Years</td><td class="positive">99%</td><td class="positive">91%</td><td class="positive">+18.9%</td><td class="negative">−1.2%</td><td class="positive">+10.1%</td></tr>
+							<tr class="highlight-row"><td>20 Years</td><td class="positive">100%</td><td class="positive">96%</td><td class="positive">+17.9%</td><td class="positive">+3.1%</td><td class="positive">+10.7%</td></tr>
+							<tr class="highlight-row"><td>30 Years</td><td class="positive">100%</td><td class="positive">100%</td><td class="positive">+14.8%</td><td class="positive">+8.4%</td><td class="positive">+10.9%</td></tr>
+						</tbody>
+					</table>
+				</div>
+				<p class="source-note">Highlighted rows indicate holding periods with no historically negative real return outcome. Data covers all rolling periods within 1926–2024 dataset.</p>
+			</div>
+
+			<!-- CAPE History -->
+			<div>
+				<h2 class="data-section-title">CAPE Ratio at Key Market Turning Points</h2>
+				<p class="data-section-desc">Shiller Cyclically-Adjusted P/E (CAPE) at major market peaks and troughs. Source: Robert Shiller, Yale University.</p>
+				<div class="data-table-wrapper">
+					<table>
+						<thead>
+							<tr>
+								<th>Date</th>
+								<th>Market Event</th>
+								<th>CAPE Ratio</th>
+								<th>Subsequent 10-Yr Ann. Return</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr><td>Sep 1929</td><td>Market Peak (pre-Crash)</td><td>32.6</td><td class="negative">−0.1%</td></tr>
+							<tr><td>Jun 1932</td><td>Great Depression Trough</td><td>5.6</td><td class="positive">+13.8%</td></tr>
+							<tr><td>Jan 1966</td><td>Post-War Bull Peak</td><td>24.1</td><td class="positive">+3.6%</td></tr>
+							<tr><td>Aug 1982</td><td>Secular Bear Trough</td><td>6.6</td><td class="positive">+17.5%</td></tr>
+							<tr><td>Dec 1999</td><td>Tech Bubble Peak</td><td>44.2</td><td class="negative">−1.4%</td></tr>
+							<tr><td>Mar 2009</td><td>Financial Crisis Trough</td><td>13.3</td><td class="positive">+18.7%</td></tr>
+							<tr><td>Jan 2022</td><td>Post-Pandemic Peak</td><td>38.3</td><td class="neutral">Pending</td></tr>
+						</tbody>
+					</table>
+				</div>
+				<p class="source-note">CAPE = current price divided by the 10-year moving average of real (inflation-adjusted) earnings. Returns shown are annualized S&amp;P 500 total returns for the decade following each date.</p>
+			</div>
+
+		</div>
+		<Footer />
+	</body>
+</html>

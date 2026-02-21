@@ -12,74 +12,128 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={`${title} — The Holding Period`} description={description} />
 		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
+			.article-header {
+				background: var(--bg-subtle);
+				border-bottom: 1px solid var(--border);
+				padding: 3.5em 0 2.5em;
 			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
+
+			.article-header-inner {
+				max-width: 720px;
 				margin: 0 auto;
-				border-radius: 12px;
+				padding: 0 1.5em;
+			}
+
+			.article-meta {
+				display: flex;
+				align-items: center;
+				gap: 1em;
+				margin-bottom: 1.25em;
+			}
+
+			.research-badge {
+				font-family: var(--font-sans);
+				font-size: 0.72em;
+				font-weight: 700;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				color: var(--accent);
+				background: var(--bg-accent);
+				padding: 0.3em 0.75em;
+				border-radius: 3px;
+			}
+
+			.article-date {
+				font-family: var(--font-sans);
+				font-size: 0.85em;
+				color: var(--text-muted);
+			}
+
+			.article-title {
+				font-family: var(--font-serif);
+				font-size: 2.5em;
+				line-height: 1.15;
+				margin: 0 0 0.5em 0;
+				font-weight: normal;
+				color: var(--text);
+			}
+
+			.article-description {
+				font-size: 1.1em;
+				color: var(--text-secondary);
+				line-height: 1.6;
+				margin: 0;
+				font-family: var(--font-sans);
+			}
+
+			.article-hero {
+				max-width: 920px;
+				margin: 0 auto;
+				padding: 2em 1.5em 0;
+			}
+
+			.article-hero img {
+				width: 100%;
+				height: 380px;
+				object-fit: cover;
+				border-radius: 6px;
 				box-shadow: var(--box-shadow);
 			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
+
+			.article-body {
+				max-width: 720px;
+				margin: 0 auto;
+				padding: 3em 1.5em 4em;
 			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
+
+			.last-updated {
+				font-size: 0.85em;
+				color: var(--text-muted);
 				font-style: italic;
+				margin-bottom: 2em;
+				padding-bottom: 2em;
+				border-bottom: 1px solid var(--border);
+			}
+
+			@media (max-width: 720px) {
+				.article-title { font-size: 1.8em; }
+				.article-header { padding: 2em 0 1.5em; }
+				.article-body { padding: 2em 1em 3em; }
+				.article-hero { padding: 1.5em 1em 0; }
+				.article-hero img { height: 220px; }
 			}
 		</style>
 	</head>
 
 	<body>
 		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <img width={1020} height={510} src={heroImage} alt="" />}
+		<div class="article-header">
+			<div class="article-header-inner">
+				<div class="article-meta">
+					<span class="research-badge">Research</span>
+					<span class="article-date"><FormattedDate date={pubDate} /></span>
 				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
+				<h1 class="article-title">{title}</h1>
+				<p class="article-description">{description}</p>
+			</div>
+		</div>
+
+		{heroImage && (
+			<div class="article-hero">
+				<img src={heroImage} alt={title} />
+			</div>
+		)}
+
+		<div class="article-body prose">
+			{updatedDate && (
+				<p class="last-updated">
+					Last updated: <FormattedDate date={updatedDate} />
+				</p>
+			)}
+			<slot />
+		</div>
 		<Footer />
 	</body>
 </html>
