@@ -1,0 +1,182 @@
+---
+import type { PickStats } from "../lib/data/types.js";
+
+interface Props {
+  picks: PickStats[];
+  lastRefresh: string | null;
+}
+
+const { picks, lastRefresh } = Astro.props;
+
+function fmtPct(val: number, digits = 1): string {
+  const sign = val >= 0 ? "+" : "";
+  return `${sign}${(val * 100).toFixed(digits)}%`;
+}
+
+function fmtPrice(val: number): string {
+  return val.toLocaleString("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 });
+}
+
+function fmtDate(iso: string): string {
+  return new Date(iso + "T00:00:00Z").toLocaleDateString("en-US", {
+    year: "numeric", month: "short", day: "numeric", timeZone: "UTC",
+  });
+}
+---
+
+<section class="picks-section">
+  <h2 class="section-title">Picks</h2>
+
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Quarter</th>
+          <th>Ticker</th>
+          <th>Entry Date</th>
+          <th class="num">Entry Price</th>
+          <th class="num">Current Price</th>
+          <th class="num">Cum. Return</th>
+          <th class="num">
+            CAGR
+            <span class="tooltip-anchor" aria-describedby="cagr-note">*</span>
+          </th>
+          <th class="num">S&P 500 TR</th>
+          <th class="num">Alpha</th>
+          <th>Detail</th>
+        </tr>
+      </thead>
+      <tbody>
+        {picks.length === 0 && (
+          <tr>
+            <td colspan="10" class="empty">No data yet — refresh pending.</td>
+          </tr>
+        )}
+        {picks.map((pick) => (
+          <tr>
+            <td class="quarter">{pick.quarterLabel}</td>
+            <td class="ticker">
+              <a href={`/picks/${pick.id}`}>{pick.ticker}</a>
+            </td>
+            <td>{fmtDate(pick.entryDate)}</td>
+            <td class="num">{fmtPrice(pick.entryPrice)}</td>
+            <td class="num">{fmtPrice(pick.currentPrice)}</td>
+            <td class:list={["num", pick.cumReturn >= 0 ? "positive" : "negative"]}>
+              {fmtPct(pick.cumReturn)}
+            </td>
+            <td class:list={["num", pick.cagr !== null && pick.cagr >= 0 ? "positive" : pick.cagr !== null ? "negative" : ""]}>
+              {pick.cagr !== null ? fmtPct(pick.cagr) : (
+                <span class="suppressed" title="CAGR shown only after 1 year of data to avoid misleading annualization.">—</span>
+              )}
+            </td>
+            <td class:list={["num", pick.benchmarkReturn >= 0 ? "positive" : "negative"]}>
+              {fmtPct(pick.benchmarkReturn)}
+            </td>
+            <td class:list={["num", pick.alpha >= 0 ? "positive" : "negative"]}>
+              {fmtPct(pick.alpha)}
+            </td>
+            <td>
+              <a href={`/picks/${pick.id}`} class="detail-link">View →</a>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <p class="footnote" id="cagr-note">
+    * CAGR shown only after 1 year of data to avoid misleading annualization.
+    Returns shown are total return assuming reinvestment of dividends. Stock series use adjusted
+    close prices. Benchmark is S&amp;P 500 Total Return index (^SP500TR). Data updated daily after
+    market close.{" "}
+    {lastRefresh ? `Last updated: ${new Date(lastRefresh).toLocaleString("en-US", { timeZone: "America/New_York", dateStyle: "medium", timeStyle: "short" })} ET` : ""}
+  </p>
+</section>
+
+<style>
+  .picks-section {
+    margin-top: 2.5rem;
+  }
+  .section-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0 0 1rem;
+    color: var(--text);
+  }
+  .table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    min-width: 780px;
+  }
+  .data-table thead th {
+    padding: 0.625rem 0.875rem;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table th.num,
+  .data-table td.num {
+    text-align: right;
+  }
+  .data-table tbody tr {
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table tbody tr:last-child {
+    border-bottom: none;
+  }
+  .data-table tbody tr:hover {
+    background: var(--surface);
+  }
+  .data-table td {
+    padding: 0.75rem 0.875rem;
+    color: var(--text);
+  }
+  .ticker a,
+  .detail-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .ticker a:hover,
+  .detail-link:hover {
+    text-decoration: underline;
+  }
+  .quarter {
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+  }
+  .positive { color: var(--green); }
+  .negative { color: var(--red); }
+  .suppressed {
+    color: var(--text-muted);
+    cursor: help;
+    border-bottom: 1px dashed var(--border);
+  }
+  .tooltip-anchor {
+    cursor: help;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+  .empty {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 2rem;
+  }
+  .footnote {
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+</style>

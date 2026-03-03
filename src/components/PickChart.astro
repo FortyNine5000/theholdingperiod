@@ -1,0 +1,130 @@
+---
+interface Props {
+  ticker: string;
+  chartDates: string[];
+  chartPickValues: number[];
+  chartBenchmarkValues: number[];
+}
+
+const { ticker, chartDates, chartPickValues, chartBenchmarkValues } = Astro.props;
+
+// Pass data to client via data attributes
+const chartDataJson = JSON.stringify({ chartDates, chartPickValues, chartBenchmarkValues });
+---
+
+<div class="chart-wrap">
+  <canvas id="pick-chart" data-ticker={ticker} data-chart={chartDataJson} aria-label={`${ticker} vs S&P 500 TR performance chart`}></canvas>
+</div>
+
+<script>
+  import Chart from "chart.js/auto";
+
+  const canvas = document.getElementById("pick-chart") as HTMLCanvasElement | null;
+  if (canvas) {
+    const raw = canvas.dataset.chart ?? "{}";
+    const ticker = canvas.dataset.ticker ?? "";
+    let parsed: { chartDates: string[]; chartPickValues: number[]; chartBenchmarkValues: number[] };
+
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      parsed = { chartDates: [], chartPickValues: [], chartBenchmarkValues: [] };
+    }
+
+    const { chartDates, chartPickValues, chartBenchmarkValues } = parsed;
+
+    // Format date labels (show month/year for longer series)
+    const formatLabel = (dateStr: string) => {
+      const d = new Date(dateStr + "T00:00:00Z");
+      return d.toLocaleDateString("en-US", { month: "short", year: "2-digit", timeZone: "UTC" });
+    };
+
+    // Thin out labels for readability
+    const totalPoints = chartDates.length;
+    const labelStep = Math.max(1, Math.floor(totalPoints / 8));
+    const labels = chartDates.map((d, i) =>
+      i % labelStep === 0 || i === totalPoints - 1 ? formatLabel(d) : ""
+    );
+
+    const accentGreen = getComputedStyle(document.documentElement)
+      .getPropertyValue("--green")
+      .trim() || "#00c896";
+
+    new Chart(canvas, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: ticker,
+            data: chartPickValues,
+            borderColor: accentGreen,
+            backgroundColor: "transparent",
+            borderWidth: 2,
+            pointRadius: 0,
+            tension: 0.1,
+          },
+          {
+            label: "S&P 500 TR",
+            data: chartBenchmarkValues,
+            borderColor: "#6b7280",
+            backgroundColor: "transparent",
+            borderWidth: 1.5,
+            borderDash: [4, 4],
+            pointRadius: 0,
+            tension: 0.1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        aspectRatio: 2.4,
+        interaction: {
+          mode: "index",
+          intersect: false,
+        },
+        plugins: {
+          legend: {
+            position: "top",
+            labels: {
+              color: "#9ca3af",
+              font: { size: 12 },
+              boxWidth: 20,
+              padding: 12,
+            },
+          },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)} (indexed to 100)`,
+            },
+          },
+        },
+        scales: {
+          x: {
+            grid: { color: "rgba(255,255,255,0.04)" },
+            ticks: { color: "#6b7280", font: { size: 11 }, maxRotation: 0 },
+          },
+          y: {
+            grid: { color: "rgba(255,255,255,0.04)" },
+            ticks: {
+              color: "#6b7280",
+              font: { size: 11 },
+              callback: (v) => `${Number(v).toFixed(0)}`,
+            },
+          },
+        },
+      },
+    });
+  }
+</script>
+
+<style>
+  .chart-wrap {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+</style>

@@ -1,0 +1,320 @@
+---
+export const prerender = false;
+
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import SEOHead from "../../components/SEOHead.astro";
+import PickChart from "../../components/PickChart.astro";
+import { picks, getPickById } from "../../content/picks.js";
+import { pickPageMeta } from "../../lib/seo/meta.js";
+import { getSeries } from "../../lib/store.js";
+import { getLastRefresh } from "../../lib/store.js";
+import { computePickStats } from "../../lib/data/compute.js";
+import { BENCHMARK_TICKER } from "../../lib/config.js";
+import "../../styles/global.css";
+
+const { id } = Astro.params;
+const pick = id ? getPickById(id) : undefined;
+
+if (!pick) {
+  return Astro.redirect("/", 302);
+}
+
+const kv = Astro.locals.runtime.env.HOLDING_PERIOD_KV;
+const [pickSeries, benchmarkSeries, lastRefresh] = await Promise.all([
+  getSeries(kv, pick.ticker),
+  getSeries(kv, BENCHMARK_TICKER),
+  getLastRefresh(kv),
+]);
+
+let stats = null;
+if (pickSeries && pickSeries.length > 0 && benchmarkSeries && benchmarkSeries.length > 0) {
+  try {
+    stats = computePickStats(pick, pickSeries, benchmarkSeries);
+  } catch (err) {
+    console.error(`[picks/${id}] computePickStats error:`, err);
+  }
+}
+
+const meta = pickPageMeta(pick, stats);
+
+function fmtPct(val: number, digits = 1): string {
+  const sign = val >= 0 ? "+" : "";
+  return `${sign}${(val * 100).toFixed(digits)}%`;
+}
+function fmtPrice(val: number): string {
+  return val.toLocaleString("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 });
+}
+function fmtDate(iso: string): string {
+  return new Date(iso + "T00:00:00Z").toLocaleDateString("en-US", {
+    year: "numeric", month: "long", day: "numeric", timeZone: "UTC",
+  });
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEOHead meta={meta} />
+  </head>
+  <body>
+    <Header />
+
+    <main class="page-main">
+      <article class="pick-article">
+
+        <!-- Pick header -->
+        <header class="pick-header">
+          <p class="pick-meta">{pick.quarterLabel} Pick</p>
+          <h1 class="pick-title">
+            <span class="pick-ticker">{pick.ticker}</span>
+            <span class="pick-company">{pick.companyName}</span>
+          </h1>
+
+          {stats && (
+            <div class="stats-block">
+              <div class="stat">
+                <span class="stat-label">Entry Date</span>
+                <span class="stat-value">{fmtDate(stats.entryDate)}</span>
+              </div>
+              <div class="stat">
+                <span class="stat-label">Entry Price</span>
+                <span class="stat-value">{fmtPrice(stats.entryPrice)}</span>
+              </div>
+              <div class="stat">
+                <span class="stat-label">Current Price</span>
+                <span class="stat-value">{fmtPrice(stats.currentPrice)}</span>
+              </div>
+              <div class="stat">
+                <span class="stat-label">Cumulative Return</span>
+                <span class:list={["stat-value", "stat-big", stats.cumReturn >= 0 ? "positive" : "negative"]}>
+                  {fmtPct(stats.cumReturn)}
+                </span>
+              </div>
+              <div class="stat">
+                <span class="stat-label">S&P 500 TR (same window)</span>
+                <span class:list={["stat-value", stats.benchmarkReturn >= 0 ? "positive" : "negative"]}>
+                  {fmtPct(stats.benchmarkReturn)}
+                </span>
+              </div>
+              <div class="stat">
+                <span class="stat-label">Alpha</span>
+                <span class:list={["stat-value", stats.alpha >= 0 ? "positive" : "negative"]}>
+                  {fmtPct(stats.alpha)}
+                </span>
+              </div>
+              <div class="stat">
+                <span class="stat-label">
+                  CAGR
+                  {stats.cagr === null && (
+                    <span class="cagr-note" title="CAGR shown only after 1 year of data to avoid misleading annualization.">
+                      *
+                    </span>
+                  )}
+                </span>
+                <span class:list={["stat-value", stats.cagr !== null && stats.cagr >= 0 ? "positive" : stats.cagr !== null ? "negative" : ""]}>
+                  {stats.cagr !== null ? fmtPct(stats.cagr) : "—"}
+                </span>
+              </div>
+            </div>
+          )}
+
+          {!stats && (
+            <p class="no-data">
+              Performance data not yet available. Check back after the first daily refresh.
+            </p>
+          )}
+        </header>
+
+        <!-- Thesis -->
+        <section class="thesis-section">
+          <h2 class="thesis-headline">{pick.thesisHeadline}</h2>
+
+          <div class="thesis-body">
+            <p>{pick.thesisIntro}</p>
+
+            {pick.thesisSections.map((section) => (
+              <div>
+                <h3>{section.heading}</h3>
+                {section.body.split("\n\n").map((para) => (
+                  <p>{para}</p>
+                ))}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <!-- What Would Make This Wrong -->
+        <section class="risk-section">
+          <h2>What Would Make This Wrong</h2>
+          <p>{pick.whatWouldMakeWrong}</p>
+        </section>
+
+        <!-- What to Watch -->
+        <section class="watch-section">
+          <h2>What to Watch</h2>
+          <p>{pick.whatToWatch}</p>
+        </section>
+
+        <!-- Chart -->
+        {stats && stats.chartDates.length > 1 && (
+          <section class="chart-section">
+            <h2>Performance vs S&P 500 TR (indexed to 100 at entry)</h2>
+            <PickChart
+              ticker={pick.ticker}
+              chartDates={stats.chartDates}
+              chartPickValues={stats.chartPickValues}
+              chartBenchmarkValues={stats.chartBenchmarkValues}
+            />
+          </section>
+        )}
+
+        <!-- Disclosure -->
+        <footer class="disclosure">
+          <p>
+            Returns shown are total return assuming reinvestment of dividends. Stock prices use
+            adjusted close. Benchmark is S&amp;P 500 Total Return index (^SP500TR). Data updated
+            daily after market close.
+            {lastRefresh && ` Last updated: ${new Date(lastRefresh).toLocaleString("en-US", { timeZone: "America/New_York", dateStyle: "medium", timeStyle: "short" })} ET.`}
+            Not investment advice.
+          </p>
+        </footer>
+
+        <p class="back-link"><a href="/">← Back to dashboard</a></p>
+      </article>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .page-main {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2rem var(--page-pad) 4rem;
+  }
+  .pick-article {
+    max-width: 720px;
+  }
+  .pick-header {
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .pick-meta {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin: 0 0 0.5rem;
+  }
+  .pick-title {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin: 0 0 1.5rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.625rem;
+    flex-wrap: wrap;
+  }
+  .pick-ticker {
+    color: var(--accent);
+  }
+  .pick-company {
+    color: var(--text-muted);
+    font-weight: 400;
+    font-size: 1.375rem;
+  }
+  .stats-block {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .stat-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+  }
+  .stat-value {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .stat-big {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  .positive { color: var(--green); }
+  .negative { color: var(--red); }
+  .cagr-note {
+    cursor: help;
+    color: var(--text-muted);
+  }
+  .no-data {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-style: italic;
+  }
+  .thesis-section,
+  .risk-section,
+  .watch-section,
+  .chart-section {
+    margin-top: 2rem;
+  }
+  .thesis-headline {
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    color: var(--text);
+    margin: 0 0 1.25rem;
+  }
+  .thesis-body h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 1.75rem 0 0.5rem;
+  }
+  .thesis-body p,
+  .risk-section p,
+  .watch-section p {
+    color: var(--text-muted);
+    line-height: 1.75;
+    font-size: 0.9375rem;
+    margin: 0 0 1rem;
+  }
+  h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 0.75rem;
+  }
+  .disclosure {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .disclosure p {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .back-link {
+    margin-top: 1.5rem;
+  }
+  .back-link a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  .back-link a:hover {
+    text-decoration: underline;
+  }
+</style>
