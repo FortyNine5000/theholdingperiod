@@ -10,8 +10,8 @@
   "kv_namespaces": [
     {
       "binding": "HOLDING_PERIOD_KV",
-      "id": "REPLACE_WITH_KV_NAMESPACE_ID",
-      "preview_id": "REPLACE_WITH_KV_PREVIEW_ID"
+      "id": "7fb4e7e294eb42d7b75b03f180d32978",
+      "preview_id": "7fb4e7e294eb42d7b75b03f180d32978"
     }
   ],
   "triggers": {
