@@ -1,0 +1,171 @@
+---
+import type { PortfolioStats } from "../lib/data/types.js";
+import { CONTRIBUTION_USD, NORMALIZED_BASE } from "../lib/config.js";
+
+interface Props {
+  stats: PortfolioStats | null;
+  initialView?: "actual" | "normalized";
+}
+
+const { stats, initialView = "actual" } = Astro.props;
+
+function fmtCurrency(val: number): string {
+  return val.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+}
+
+function fmtPct(val: number, digits = 1): string {
+  const sign = val >= 0 ? "+" : "";
+  return `${sign}${(val * 100).toFixed(digits)}%`;
+}
+
+const actual = stats?.actual ?? null;
+const normalized = stats?.normalized ?? null;
+---
+
+<section class="portfolio-section">
+  <h2 class="section-title">Portfolio</h2>
+
+  {stats === null && (
+    <p class="empty-state">No portfolio data yet — data refreshes daily after market close.</p>
+  )}
+
+  {stats !== null && (
+    <div class="portfolio-data" id="portfolio-table-wrap">
+      <!-- Label swaps via JS on viewchange event -->
+      <p class="view-label" id="portfolio-label" data-actual={actual?.label ?? ""} data-normalized={normalized?.label ?? ""}>
+        {actual?.label}
+      </p>
+
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="num">Total Invested</th>
+              <th class="num">Portfolio Value</th>
+              <th class="num">Benchmark Value</th>
+              <th class="num">Portfolio TR%</th>
+              <th class="num">S&P 500 TR%</th>
+              <th class="num">Alpha</th>
+              <th class="num">Portfolio CAGR</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <!-- actual values -->
+              <td class="num" data-actual={fmtCurrency(actual?.totalContributions ?? 0)} data-normalized={fmtCurrency(normalized?.totalContributions ?? 0)}>
+                {fmtCurrency(actual?.totalContributions ?? 0)}
+              </td>
+              <td class="num" data-actual={fmtCurrency(actual?.portfolioValue ?? 0)} data-normalized={fmtCurrency(normalized?.portfolioValue ?? 0)}>
+                {fmtCurrency(actual?.portfolioValue ?? 0)}
+              </td>
+              <td class="num" data-actual={fmtCurrency(actual?.benchmarkValue ?? 0)} data-normalized={fmtCurrency(normalized?.benchmarkValue ?? 0)}>
+                {fmtCurrency(actual?.benchmarkValue ?? 0)}
+              </td>
+              <!-- Returns are identical in both views -->
+              <td class:list={["num", (actual?.portfolioTR ?? 0) >= 0 ? "positive" : "negative"]}>
+                {fmtPct(actual?.portfolioTR ?? 0)}
+              </td>
+              <td class:list={["num", (actual?.benchmarkTR ?? 0) >= 0 ? "positive" : "negative"]}>
+                {fmtPct(actual?.benchmarkTR ?? 0)}
+              </td>
+              <td class:list={["num", (actual?.alpha ?? 0) >= 0 ? "positive" : "negative"]}>
+                {fmtPct(actual?.alpha ?? 0)}
+              </td>
+              <td class="num">
+                {actual?.portfolioCagr != null ? (
+                  <span class:list={(actual.portfolioCagr >= 0) ? "positive" : "negative"}>
+                    {fmtPct(actual.portfolioCagr)}
+                  </span>
+                ) : (
+                  <span class="suppressed" title="CAGR shown only after 1 year of data to avoid misleading annualization.">—</span>
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )}
+</section>
+
+<script>
+  document.addEventListener("viewchange", (e: Event) => {
+    const { view } = (e as CustomEvent<{ view: string }>).detail;
+    const wrap = document.getElementById("portfolio-table-wrap");
+    const label = document.getElementById("portfolio-label");
+    if (!wrap || !label) return;
+
+    // Update label
+    label.textContent = label.dataset[view as "actual" | "normalized"] ?? "";
+
+    // Update dollar cells that have both data-actual and data-normalized
+    wrap.querySelectorAll<HTMLElement>("td[data-actual]").forEach((td) => {
+      const val = view === "normalized" ? td.dataset.normalized : td.dataset.actual;
+      if (val != null) td.textContent = val;
+    });
+  });
+
+  // Apply initial view from URL on load
+  const params = new URLSearchParams(window.location.search);
+  const initial = params.get("view") === "normalized" ? "normalized" : "actual";
+  if (initial === "normalized") {
+    document.dispatchEvent(new CustomEvent("viewchange", { detail: { view: "normalized" } }));
+  }
+</script>
+
+<style>
+  .portfolio-section {
+    margin-top: 2.5rem;
+  }
+  .section-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+    color: var(--text);
+  }
+  .view-label {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    margin: 0 0 0.75rem;
+  }
+  .empty-state {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+  .table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    min-width: 680px;
+  }
+  .data-table thead th {
+    padding: 0.625rem 0.875rem;
+    text-align: right;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table td {
+    padding: 0.875rem 0.875rem;
+    color: var(--text);
+  }
+  .data-table td.num {
+    text-align: right;
+  }
+  .positive { color: var(--green); }
+  .negative { color: var(--red); }
+  .suppressed {
+    color: var(--text-muted);
+    cursor: help;
+    border-bottom: 1px dashed var(--border);
+  }
+</style>

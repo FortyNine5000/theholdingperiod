@@ -1,0 +1,79 @@
+---
+// No server-side props needed; the toggle is purely client-side
+---
+
+<div class="toggle-wrapper">
+  <button
+    class="toggle-btn"
+    id="view-toggle"
+    data-active="actual"
+    aria-label="Toggle portfolio view"
+  >
+    <span class="toggle-option" data-view="actual">Actual</span>
+    <span class="toggle-option" data-view="normalized">Normalized ($1,000/qtr)</span>
+  </button>
+</div>
+
+<script>
+  const btn = document.getElementById("view-toggle") as HTMLButtonElement | null;
+  if (btn) {
+    // Read initial state from URL param
+    const params = new URLSearchParams(window.location.search);
+    const initial = params.get("view") === "normalized" ? "normalized" : "actual";
+    applyView(initial);
+
+    btn.addEventListener("click", () => {
+      const current = btn.dataset.active ?? "actual";
+      const next = current === "actual" ? "normalized" : "actual";
+      applyView(next);
+
+      // Persist in URL (no reload)
+      const url = new URL(window.location.href);
+      url.searchParams.set("view", next);
+      window.history.replaceState(null, "", url.toString());
+
+      // Notify PortfolioTable
+      document.dispatchEvent(new CustomEvent("viewchange", { detail: { view: next } }));
+    });
+  }
+
+  function applyView(view: string) {
+    const btn = document.getElementById("view-toggle") as HTMLButtonElement | null;
+    if (!btn) return;
+    btn.dataset.active = view;
+    btn.querySelectorAll<HTMLSpanElement>(".toggle-option").forEach((span) => {
+      span.classList.toggle("active", span.dataset.view === view);
+    });
+  }
+</script>
+
+<style>
+  .toggle-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.75rem;
+  }
+  .toggle-btn {
+    display: flex;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2px;
+    cursor: pointer;
+    gap: 2px;
+  }
+  .toggle-option {
+    padding: 0.3rem 0.75rem;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    color: var(--text-muted);
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
+  .toggle-option.active {
+    background: var(--bg);
+    color: var(--text);
+    font-weight: 500;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+</style>

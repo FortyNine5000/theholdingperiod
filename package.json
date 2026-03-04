@@ -1,24 +1,12 @@
 {
   "name": "theholdingperiod",
-  "description": "Build a personal website, blog, or portfolio with Astro.",
-  "cloudflare": {
-    "label": "Astro Framework Starter",
-    "products": [
-      "Workers"
-    ],
-    "categories": [],
-    "icon_urls": [
-      "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public"
-    ],
-    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/33bbbf02-eda2-4d3f-b244-c27a280f3900/public",
-    "publish": true
-  },
+  "description": "The Holding Period — public log of quarterly long-term stock picks tracked against the S&P 500 Total Return index.",
   "dependencies": {
     "@astrojs/cloudflare": "12.5.0",
-    "@astrojs/mdx": "4.2.4",
-    "@astrojs/rss": "4.0.11",
-    "@astrojs/sitemap": "3.3.0",
+    "@resvg/resvg-wasm": "^2.6.0",
     "astro": "5.7.4",
+    "chart.js": "^4.4.0",
+    "satori": "^0.10.14",
     "typescript": "5.8.3"
   },
   "devDependencies": {
@@ -28,7 +16,7 @@
     "astro": "astro",
     "build": "astro build",
     "cf-typegen": "wrangler types",
-    "check": "astro build && tsc && wrangler deploy --dry-run",
+    "check": "astro check && tsc --noEmit",
     "deploy": "wrangler deploy",
     "dev": "astro dev",
     "preview": "astro build && wrangler dev"

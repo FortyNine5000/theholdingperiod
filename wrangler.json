@@ -7,6 +7,16 @@
     "directory": "./dist",
     "binding": "ASSETS"
   },
+  "kv_namespaces": [
+    {
+      "binding": "HOLDING_PERIOD_KV",
+      "id": "7fb4e7e294eb42d7b75b03f180d32978",
+      "preview_id": "7fb4e7e294eb42d7b75b03f180d32978"
+    }
+  ],
+  "triggers": {
+    "crons": ["30 22 * * *"]
+  },
   "observability": {
     "enabled": true
   },

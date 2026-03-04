@@ -1,50 +1,122 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+export const prerender = false;
+
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import SEOHead from "../components/SEOHead.astro";
+import Explainer from "../components/Explainer.astro";
+import PicksTable from "../components/PicksTable.astro";
+import PortfolioToggle from "../components/PortfolioToggle.astro";
+import PortfolioTable from "../components/PortfolioTable.astro";
+import NewsletterSignup from "../components/NewsletterSignup.astro";
+import { homePageMeta } from "../lib/seo/meta.js";
+import { getComputedPicks, getComputedPortfolio, getLastRefresh } from "../lib/store.js";
+import "../styles/global.css";
+
+const kv = Astro.locals.runtime.env.HOLDING_PERIOD_KV;
+
+const [computedPicks, portfolio, lastRefresh] = await Promise.all([
+  getComputedPicks(kv),
+  getComputedPortfolio(kv),
+  getLastRefresh(kv),
+]);
+
+const meta = homePageMeta();
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+  <head>
+    <SEOHead meta={meta} />
+  </head>
+  <body>
+    <Header />
+
+    <main class="page-main">
+      <!-- Hero -->
+      <section class="hero">
+        <h1 class="hero-headline">
+          One stock per quarter.<br />Hold 25 years. Total return. No rebalancing.
+        </h1>
+        <p class="hero-sub">
+          This is a public log of long-term equity picks, tracked against the S&amp;P 500 Total
+          Return index. Every pick is here from day one. The benchmark doesn't flinch, and neither
+          does the record.
+        </p>
+        <a href="/about" class="hero-link">Read the methodology →</a>
+      </section>
+
+      <!-- Explainer -->
+      <Explainer />
+
+      <!-- Picks Table -->
+      <PicksTable picks={computedPicks ?? []} lastRefresh={lastRefresh} />
+
+      <!-- Portfolio -->
+      <PortfolioToggle />
+      <PortfolioTable stats={portfolio} />
+
+      <!-- Newsletter -->
+      <NewsletterSignup />
+
+      <!-- Contact CTA -->
+      <section class="contact-cta">
+        <p>
+          Questions about the methodology or a pick? <a href="/contact">Get in touch.</a>
+        </p>
+      </section>
+    </main>
+
+    <Footer />
+  </body>
 </html>
+
+<style>
+  .page-main {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2rem var(--page-pad) 4rem;
+  }
+  .hero {
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .hero-headline {
+    font-size: clamp(1.5rem, 4vw, 2.125rem);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+    color: var(--text);
+    margin: 0 0 1rem;
+  }
+  .hero-sub {
+    font-size: 1.0625rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 0 1.25rem;
+  }
+  .hero-link {
+    font-size: 0.9rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .hero-link:hover {
+    text-decoration: underline;
+  }
+  .contact-cta {
+    margin-top: 2.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  .contact-cta a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .contact-cta a:hover {
+    text-decoration: underline;
+  }
+</style>
