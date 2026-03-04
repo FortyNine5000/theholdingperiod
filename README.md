@@ -1,7 +1,7 @@
 # The Holding Period
 
 A public log of quarterly long-term stock picks tracked against the S&P 500 Total Return index.
-One stock per quarter. Hold 25 years. No rebalancing. Every pick logged from day one.
+One stock per quarter. Hold 25 years. No rebalancing. Every pick logged from day one. 
 
 **Live site:** https://theholdingperiod.com
 
