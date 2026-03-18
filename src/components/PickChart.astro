@@ -79,7 +79,7 @@ const chartDataJson = JSON.stringify({ chartDates, chartPickValues, chartBenchma
       options: {
         responsive: true,
         maintainAspectRatio: true,
-        aspectRatio: 2.4,
+        aspectRatio: window.innerWidth < 600 ? 1.4 : 2.4,
         interaction: {
           mode: "index",
           intersect: false,

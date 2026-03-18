@@ -36,7 +36,8 @@ const normalized = stats?.normalized ?? null;
         {actual?.label}
       </p>
 
-      <div class="table-wrapper">
+      <!-- Desktop table -->
+      <div class="table-wrapper desktop-only">
         <table class="data-table">
           <thead>
             <tr>
@@ -51,7 +52,6 @@ const normalized = stats?.normalized ?? null;
           </thead>
           <tbody>
             <tr>
-              <!-- actual values -->
               <td class="num" data-actual={fmtCurrency(actual?.totalContributions ?? 0)} data-normalized={fmtCurrency(normalized?.totalContributions ?? 0)}>
                 {fmtCurrency(actual?.totalContributions ?? 0)}
               </td>
@@ -61,7 +61,6 @@ const normalized = stats?.normalized ?? null;
               <td class="num" data-actual={fmtCurrency(actual?.benchmarkValue ?? 0)} data-normalized={fmtCurrency(normalized?.benchmarkValue ?? 0)}>
                 {fmtCurrency(actual?.benchmarkValue ?? 0)}
               </td>
-              <!-- Returns are identical in both views -->
               <td class:list={["num", (actual?.portfolioTR ?? 0) >= 0 ? "positive" : "negative"]}>
                 {fmtPct(actual?.portfolioTR ?? 0)}
               </td>
@@ -84,6 +83,46 @@ const normalized = stats?.normalized ?? null;
           </tbody>
         </table>
       </div>
+
+      <!-- Mobile stat grid -->
+      <div class="stat-grid mobile-only">
+        <div class="stat-cell">
+          <span class="stat-label">Total Invested</span>
+          <span class="stat-value" data-actual={fmtCurrency(actual?.totalContributions ?? 0)} data-normalized={fmtCurrency(normalized?.totalContributions ?? 0)}>
+            {fmtCurrency(actual?.totalContributions ?? 0)}
+          </span>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-label">Portfolio Value</span>
+          <span class="stat-value" data-actual={fmtCurrency(actual?.portfolioValue ?? 0)} data-normalized={fmtCurrency(normalized?.portfolioValue ?? 0)}>
+            {fmtCurrency(actual?.portfolioValue ?? 0)}
+          </span>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-label">Benchmark Value</span>
+          <span class="stat-value" data-actual={fmtCurrency(actual?.benchmarkValue ?? 0)} data-normalized={fmtCurrency(normalized?.benchmarkValue ?? 0)}>
+            {fmtCurrency(actual?.benchmarkValue ?? 0)}
+          </span>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-label">Portfolio TR</span>
+          <span class:list={["stat-value", (actual?.portfolioTR ?? 0) >= 0 ? "positive" : "negative"]}>
+            {fmtPct(actual?.portfolioTR ?? 0)}
+          </span>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-label">S&P 500 TR</span>
+          <span class:list={["stat-value", (actual?.benchmarkTR ?? 0) >= 0 ? "positive" : "negative"]}>
+            {fmtPct(actual?.benchmarkTR ?? 0)}
+          </span>
+        </div>
+        <div class="stat-cell">
+          <span class="stat-label">Alpha</span>
+          <span class:list={["stat-value", (actual?.alpha ?? 0) >= 0 ? "positive" : "negative"]}>
+            {fmtPct(actual?.alpha ?? 0)}
+          </span>
+        </div>
+      </div>
     </div>
   )}
 </section>
@@ -98,10 +137,10 @@ const normalized = stats?.normalized ?? null;
     // Update label
     label.textContent = label.dataset[view as "actual" | "normalized"] ?? "";
 
-    // Update dollar cells that have both data-actual and data-normalized
-    wrap.querySelectorAll<HTMLElement>("td[data-actual]").forEach((td) => {
-      const val = view === "normalized" ? td.dataset.normalized : td.dataset.actual;
-      if (val != null) td.textContent = val;
+    // Update dollar cells in table (td) and stat grid (span) that have data-actual/normalized
+    wrap.querySelectorAll<HTMLElement>("td[data-actual], span[data-actual]").forEach((el) => {
+      const val = view === "normalized" ? el.dataset.normalized : el.dataset.actual;
+      if (val != null) el.textContent = val;
     });
   });
 
@@ -167,5 +206,46 @@ const normalized = stats?.normalized ?? null;
     color: var(--text-muted);
     cursor: help;
     border-bottom: 1px dashed var(--border);
+  }
+
+  /* Responsive visibility */
+  .mobile-only { display: none; }
+
+  @media (max-width: 680px) {
+    .desktop-only { display: none; }
+    .mobile-only { display: grid; }
+
+    .stat-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .stat-cell {
+      padding: 0.875rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stat-cell:nth-child(3n) {
+      border-right: none;
+    }
+    .stat-cell:nth-last-child(-n+3) {
+      border-bottom: none;
+    }
+    .stat-label {
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
+    .stat-value {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--text);
+    }
   }
 </style>

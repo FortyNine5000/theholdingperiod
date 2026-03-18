@@ -15,7 +15,7 @@ function isActive(path: string) {
         <line x1="4" y1="4" x2="20" y2="4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
         <line x1="4" y1="18" x2="20" y2="18" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
       </svg>
-      The Holding Period
+      <span class="site-name-text">The Holding Period</span>
     </a>
     <nav aria-label="Main navigation">
       <ul>
@@ -30,12 +30,12 @@ function isActive(path: string) {
           </a>
         </li>
         <li>
-          <a href="/about" class:list={["nav-link", { active: isActive("/about") }]}>
+          <a href="/about" class:list={["nav-link", "secondary", { active: isActive("/about") }]}>
             About
           </a>
         </li>
         <li>
-          <a href="/contact" class:list={["nav-link", { active: isActive("/contact") }]}>
+          <a href="/contact" class:list={["nav-link", "secondary", { active: isActive("/contact") }]}>
             Contact
           </a>
         </li>
@@ -101,12 +101,21 @@ function isActive(path: string) {
   .nav-link.active {
     font-weight: 500;
   }
-  @media (max-width: 480px) {
+  /* On narrow screens hide secondary nav links (both are in the footer) */
+  @media (max-width: 520px) {
+    .nav-link.secondary {
+      display: none;
+    }
     nav ul {
       gap: 1rem;
     }
-    .nav-link {
-      font-size: 0.8125rem;
+  }
+  @media (max-width: 380px) {
+    .site-name-text {
+      display: none;
+    }
+    nav ul {
+      gap: 0.875rem;
     }
   }
 </style>

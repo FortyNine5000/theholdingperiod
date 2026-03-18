@@ -27,7 +27,8 @@ function fmtDate(iso: string): string {
 <section class="picks-section">
   <h2 class="section-title">Picks</h2>
 
-  <div class="table-wrapper">
+  <!-- Desktop table (hidden on mobile) -->
+  <div class="table-wrapper desktop-only">
     <table class="data-table">
       <thead>
         <tr>
@@ -82,6 +83,48 @@ function fmtDate(iso: string): string {
         ))}
       </tbody>
     </table>
+  </div>
+
+  <!-- Mobile card view (hidden on desktop) -->
+  <div class="cards-list mobile-only">
+    {picks.length === 0 && (
+      <p class="empty">No data yet — refresh pending.</p>
+    )}
+    {picks.map((pick) => (
+      <a href={`/picks/${pick.id}`} class="pick-card">
+        <div class="card-header">
+          <span class="card-ticker">{pick.ticker}</span>
+          <span class="card-quarter">{pick.quarterLabel}</span>
+        </div>
+        <div class="card-stats">
+          <div class="card-stat">
+            <span class="card-stat-label">Return</span>
+            <span class:list={["card-stat-value", pick.cumReturn >= 0 ? "positive" : "negative"]}>
+              {fmtPct(pick.cumReturn)}
+            </span>
+          </div>
+          <div class="card-stat">
+            <span class="card-stat-label">S&P 500 TR</span>
+            <span class:list={["card-stat-value", pick.benchmarkReturn >= 0 ? "positive" : "negative"]}>
+              {fmtPct(pick.benchmarkReturn)}
+            </span>
+          </div>
+          <div class="card-stat">
+            <span class="card-stat-label">Alpha</span>
+            <span class:list={["card-stat-value", pick.alpha >= 0 ? "positive" : "negative"]}>
+              {fmtPct(pick.alpha)}
+            </span>
+          </div>
+          <div class="card-stat">
+            <span class="card-stat-label">CAGR*</span>
+            <span class:list={["card-stat-value", pick.cagr !== null && pick.cagr >= 0 ? "positive" : pick.cagr !== null ? "negative" : "muted"]}>
+              {pick.cagr !== null ? fmtPct(pick.cagr) : "—"}
+            </span>
+          </div>
+        </div>
+        <span class="card-arrow">View thesis →</span>
+      </a>
+    ))}
   </div>
 
   <p class="footnote" id="cagr-note">
@@ -178,5 +221,70 @@ function fmtDate(iso: string): string {
     font-size: 0.75rem;
     color: var(--text-muted);
     line-height: 1.6;
+  }
+
+  /* Responsive visibility */
+  .mobile-only { display: none; }
+
+  /* Mobile card layout */
+  @media (max-width: 680px) {
+    .desktop-only { display: none; }
+    .mobile-only { display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .pick-card {
+      display: block;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s;
+    }
+    .pick-card:hover {
+      border-color: var(--accent);
+      text-decoration: none;
+    }
+    .card-header {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .card-ticker {
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .card-quarter {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .card-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .card-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+    .card-stat-label {
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
+    .card-stat-value {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    .card-arrow {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .muted { color: var(--text-muted); }
   }
 </style>
