@@ -8,13 +8,18 @@ const year = new Date().getFullYear();
       Returns shown are total return assuming reinvestment of dividends. Stock series use adjusted
       close prices. Benchmark is S&P 500 Total Return index (^SP500TR). Not investment advice.
     </p>
-    <p class="footer-links">
-      <a href="/about">About</a>
-      <span aria-hidden="true">·</span>
-      <a href="/contact">Contact</a>
-      <span aria-hidden="true">·</span>
-      <span>&copy; {year} The Holding Period</span>
-    </p>
+    <div class="footer-bottom">
+      <span class="copyright">&copy; {year} The Holding Period</span>
+      <nav aria-label="Footer navigation">
+        <ul>
+          <li><a href="/picks/">Picks</a></li>
+          <li><a href="/topics/">Topics</a></li>
+          <li><a href="/faq">FAQ</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
   </div>
 </footer>
 
@@ -29,28 +34,47 @@ const year = new Date().getFullYear();
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    align-items: center;
-    text-align: center;
+    gap: 1rem;
   }
   .disclaimer {
     font-size: 0.75rem;
     color: var(--text-muted);
-    max-width: 620px;
     line-height: 1.6;
+    max-width: 680px;
   }
-  .footer-links {
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .copyright {
     font-size: 0.8rem;
     color: var(--text-muted);
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
   }
-  .footer-links a {
+  nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+  nav ul li a {
+    font-size: 0.8rem;
     color: var(--text-muted);
     text-decoration: none;
+    transition: color 0.15s;
   }
-  .footer-links a:hover {
+  nav ul li a:hover {
     color: var(--text);
+    text-decoration: none;
+  }
+  @media (max-width: 600px) {
+    .footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 </style>

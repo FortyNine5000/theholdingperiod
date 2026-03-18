@@ -1,0 +1,156 @@
+---
+export const prerender = true;
+
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import SEOHead from "../../components/SEOHead.astro";
+import { topicsIndexMeta } from "../../lib/seo/meta.js";
+import { topics } from "../../content/topics.js";
+import "../../styles/global.css";
+
+const meta = topicsIndexMeta();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEOHead meta={meta} />
+  </head>
+  <body>
+    <Header />
+
+    <main class="page-main">
+      <div class="page-header">
+        <h1>Topics</h1>
+        <p class="page-desc">
+          Frameworks and ideas behind long-horizon equity investing. Each topic is an ongoing
+          reference — updated as the thinking evolves.
+        </p>
+      </div>
+
+      <ul class="topics-list">
+        {topics.map((topic) => (
+          <li class="topic-item">
+            {topic.comingSoon ? (
+              <div class="topic-card topic-card--soon">
+                <div class="topic-body">
+                  <span class="topic-title">{topic.title}</span>
+                  <span class="topic-desc">{topic.description}</span>
+                </div>
+                <span class="badge-soon">Coming soon</span>
+              </div>
+            ) : (
+              <a href={`/topics/${topic.slug}`} class="topic-card topic-card--link">
+                <div class="topic-body">
+                  <span class="topic-title">{topic.title}</span>
+                  <span class="topic-desc">{topic.description}</span>
+                </div>
+                <span class="topic-arrow" aria-hidden="true">→</span>
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .page-main {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2rem var(--page-pad) 4rem;
+  }
+  .page-header {
+    padding: 2rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+    max-width: 640px;
+  }
+  .page-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.75rem;
+  }
+  .page-desc {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .topics-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .topic-card {
+    background: var(--surface);
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    border: 1px solid transparent;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .topic-card--link {
+    text-decoration: none;
+    color: inherit;
+  }
+  .topic-card--link:hover {
+    background: var(--bg);
+    border-color: var(--border);
+    text-decoration: none;
+  }
+  .topic-card--link:hover .topic-title {
+    color: var(--accent);
+  }
+  .topic-card--soon {
+    opacity: 0.6;
+  }
+  .topic-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    flex: 1;
+  }
+  .topic-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+    transition: color 0.15s;
+  }
+  .topic-desc {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .topic-arrow {
+    font-size: 1rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+  .badge-soon {
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 0.2em 0.5em;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+</style>

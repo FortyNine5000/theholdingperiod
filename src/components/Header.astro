@@ -9,12 +9,24 @@ function isActive(path: string) {
 
 <header class="site-header">
   <div class="header-inner">
-    <a href="/" class="site-name">The Holding Period</a>
+    <a href="/" class="site-name" aria-label="The Holding Period — home">
+      <svg class="site-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+        <path d="M5 4 h14 l-5.5 7 5.5 7 H5 l5.5-7-5.5-7 Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+        <line x1="4" y1="4" x2="20" y2="4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        <line x1="4" y1="18" x2="20" y2="18" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+      The Holding Period
+    </a>
     <nav aria-label="Main navigation">
       <ul>
         <li>
-          <a href="/" class:list={["nav-link", { active: isActive("/") && !isActive("/picks") && !isActive("/about") && !isActive("/contact") }]}>
-            Dashboard
+          <a href="/picks/" class:list={["nav-link", { active: isActive("/picks") }]}>
+            Picks
+          </a>
+        </li>
+        <li>
+          <a href="/topics/" class:list={["nav-link", { active: isActive("/topics") }]}>
+            Topics
           </a>
         </li>
         <li>
@@ -48,14 +60,24 @@ function isActive(path: string) {
   }
   .site-name {
     font-weight: 600;
-    font-size: 0.95rem;
-    letter-spacing: -0.01em;
+    font-size: 0.9375rem;
+    letter-spacing: -0.02em;
     color: var(--text);
     text-decoration: none;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
   }
   .site-name:hover {
     color: var(--accent);
+    text-decoration: none;
+  }
+  .site-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--accent);
+    flex-shrink: 0;
   }
   nav ul {
     list-style: none;
@@ -69,12 +91,22 @@ function isActive(path: string) {
     color: var(--text-muted);
     text-decoration: none;
     transition: color 0.15s;
+    font-weight: 400;
   }
   .nav-link:hover,
   .nav-link.active {
     color: var(--text);
+    text-decoration: none;
   }
   .nav-link.active {
     font-weight: 500;
+  }
+  @media (max-width: 480px) {
+    nav ul {
+      gap: 1rem;
+    }
+    .nav-link {
+      font-size: 0.8125rem;
+    }
   }
 </style>

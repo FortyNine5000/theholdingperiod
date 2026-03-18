@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { picks } from "../content/picks.js";
+import { topics } from "../content/topics.js";
 import { SITE_URL } from "../lib/config.js";
 
 export const prerender = true;
@@ -21,6 +22,24 @@ const staticPages: SitemapUrl[] = [
     priority: "1.0",
   },
   {
+    loc: `${SITE_URL}/picks/`,
+    lastmod: buildDate,
+    changefreq: "quarterly",
+    priority: "0.9",
+  },
+  {
+    loc: `${SITE_URL}/topics/`,
+    lastmod: buildDate,
+    changefreq: "monthly",
+    priority: "0.7",
+  },
+  {
+    loc: `${SITE_URL}/faq`,
+    lastmod: buildDate,
+    changefreq: "monthly",
+    priority: "0.7",
+  },
+  {
     loc: `${SITE_URL}/about`,
     lastmod: buildDate,
     changefreq: "monthly",
@@ -36,12 +55,19 @@ const staticPages: SitemapUrl[] = [
 
 const pickPages: SitemapUrl[] = picks.map((pick) => ({
   loc: `${SITE_URL}/picks/${pick.id}`,
-  lastmod: pick.quarterEnd, // entry date as lastmod
+  lastmod: pick.quarterEnd,
   changefreq: "daily",
   priority: "0.9",
 }));
 
-const allUrls = [...staticPages, ...pickPages];
+const topicPages: SitemapUrl[] = topics.map((topic) => ({
+  loc: `${SITE_URL}/topics/${topic.slug}`,
+  lastmod: buildDate,
+  changefreq: "monthly",
+  priority: "0.6",
+}));
+
+const allUrls = [...staticPages, ...pickPages, ...topicPages];
 
 function xml(urls: SitemapUrl[]): string {
   const urlset = urls
