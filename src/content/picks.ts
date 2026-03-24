@@ -93,6 +93,46 @@ export const picks: Pick[] = [
     whatToWatch:
       "Cancellation rates (the leading indicator of demand health at the contract stage), option land conversion pace relative to guidance (the operational health of the model), and return on equity across the housing cycle (the integrity of the capital discipline). If ROE starts drifting down while leverage drifts up, that's the signal that something has changed in how the business is being managed.",
   },
+  {
+    id: "dhr-2026-q1",
+    ticker: "DHR",
+    companyName: "Danaher Corporation",
+    quarterLabel: "2026 Q1",
+    quarterEnd: "2026-03-31",
+    pageTitle: "Danaher (DHR) — 2026 Q1 Pick | The Holding Period",
+    metaDescription:
+      "Danaher Corporation named as The Holding Period's Q1 2026 long-term stock pick. 25-year hold thesis: the Danaher Business System applied to life sciences secular growth. Tracked vs S&P 500 Total Return from March 2026.",
+    ogHeadline: "DHR — 2026 Q1 | The Holding Period",
+    thesisHeadline: "The Operating System for Life Sciences",
+    thesisIntro:
+      "Danaher is one of the most studied compounders in American corporate history — and for good reason. From a diversified conglomerate in the late 1980s, it has been systematically rebuilt into a focused life sciences and diagnostics platform through the relentless application of the Danaher Business System (DBS): a proprietary operating discipline modeled on lean manufacturing principles that extracts margin, eliminates waste, and accelerates organic growth at every acquired business.",
+    thesisSections: [
+      {
+        heading: "The Danaher Business System",
+        body: "The moat here is unusual. Most industrial roll-ups rely on financial engineering — cheap debt, multiple arbitrage, and scale purchasing. Danaher compounds differently. DBS is a genuine organizational capability that cannot be purchased or replicated quickly; it takes years to embed in an acquired culture. That means Danaher consistently pays fair prices for good businesses and turns them into great ones — a far more durable model than a purely financial roll-up.",
+      },
+      {
+        heading: "The Life Sciences Portfolio",
+        body: "The portfolio today clusters in two high-quality segments: Biotechnology (Cytiva, Pall, Aldevron — the tools and consumables that enable drug discovery and manufacturing) and Life Sciences Instruments (SCIEX, Leica Microsystems, Molecular Devices). These are pick-and-shovel businesses for the biotech and pharmaceutical industries. Revenues are sticky — consumables follow instrument placements for years, creating highly predictable recurring streams.\n\nR&D spending globally is structurally increasing, and the shift to biologics (antibodies, cell and gene therapies) requires exactly the filtration, purification, and analytical tools Danaher makes.",
+      },
+      {
+        heading: "The Post-Spin Danaher",
+        body: "Diagnostics, once a third leg via Beckman Coulter and Radiometer, was spun into Veralto in 2023. That separation was capital-allocator discipline in action: focus the remaining business on higher-growth life sciences exposure, reset the reinvestment surface, and allow Veralto to optimize separately. The post-spin Danaher is cleaner and more focused than at any point in its history.",
+      },
+      {
+        heading: "Coming Out of the Destocking Cycle",
+        body: "The 2021–2023 period distorted the picture. COVID drove exceptional demand for bioprocessing tools (vaccine manufacturing required Cytiva's single-use bioreactors at enormous scale), followed by sharp destocking as biopharma customers worked down elevated inventories through 2023–2024. This cycle is substantially behind us. Normalized demand is reasserting, and Danaher's organic growth trajectory is returning to its 5–7% long-run baseline, with M&A upside from a balance sheet that carries conservative leverage for its size.",
+      },
+      {
+        heading: "The 25-Year Case",
+        body: "At current valuations — roughly 28–32× forward earnings depending on the normalization assumption — DHR is not cheap in an absolute sense. But a 25-year holder is not buying a commodity multiple. They are buying the compounding engine that DBS represents, applied across life sciences for the next quarter century. If Danaher can continue to generate 20%+ ROIC on reinvested capital and grow earnings at 10–12% annually (both consistent with its 20-year track record outside of anomalous periods), the entry price today will look conservative in 2051.\n\nHealthcare spending, drug discovery, and diagnostic precision are secular growth vectors with no plausible ceiling. Danaher is not a lottery ticket. It is a proven system applied to a growing market.",
+      },
+    ],
+    whatWouldMakeWrong:
+      "DBS is embodied in institutional culture and key leaders. Culture drift at the top — a new management team that abandons the operating discipline or chases revenue scale over returns — is the primary risk, and the one that cannot be hedged. A second scenario: a large acquisition at a premium multiple in a tangentially related business that fails to absorb DBS, destroying capital rather than compounding it. The life sciences tools sector also carries biotech funding cycle risk — instruments are capital expenditure, and biopharma customers cut capex in downturns. Over 25 years, multiple cycles are guaranteed; the question is whether the balance sheet and recurring consumable base are resilient enough to weather them without permanent impairment.",
+    whatToWatch:
+      "Core revenue growth ex-COVID (the clearest signal that normalized demand has fully returned), bioprocessing order trends at Cytiva and Pall (the highest-value segment), gross margin trajectory (DBS should be expanding margins at acquisitions over a 3–5 year horizon), and ROIC on recent acquisitions (the acid test of whether DBS is actually working). If DBS attrition becomes visible — organic growth slipping below 4%, margins flat despite volume recovery — that is the signal to reassess.",
+  },
 ];
 
 export function getPickById(id: string): Pick | undefined {
