@@ -1,13 +1,12 @@
 ---
 import type { PortfolioStats } from "../lib/data/types.js";
-import { CONTRIBUTION_USD, NORMALIZED_BASE } from "../lib/config.js";
+import { CONTRIBUTION_USD } from "../lib/config.js";
 
 interface Props {
   stats: PortfolioStats | null;
-  initialView?: "actual" | "normalized";
 }
 
-const { stats, initialView = "actual" } = Astro.props;
+const { stats } = Astro.props;
 
 function fmtCurrency(val: number): string {
   return val.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
@@ -18,8 +17,7 @@ function fmtPct(val: number, digits = 1): string {
   return `${sign}${(val * 100).toFixed(digits)}%`;
 }
 
-const actual = stats?.actual ?? null;
-const normalized = stats?.normalized ?? null;
+const view = stats?.actual ?? null;
 ---
 
 <section class="portfolio-section">
@@ -30,11 +28,8 @@ const normalized = stats?.normalized ?? null;
   )}
 
   {stats !== null && (
-    <div class="portfolio-data" id="portfolio-table-wrap">
-      <!-- Label swaps via JS on viewchange event -->
-      <p class="view-label" id="portfolio-label" data-actual={actual?.label ?? ""} data-normalized={normalized?.label ?? ""}>
-        {actual?.label}
-      </p>
+    <div>
+      <p class="view-label">Assumes ${CONTRIBUTION_USD.toLocaleString()} invested per quarter</p>
 
       <!-- Desktop table -->
       <div class="table-wrapper desktop-only">
@@ -52,28 +47,22 @@ const normalized = stats?.normalized ?? null;
           </thead>
           <tbody>
             <tr>
-              <td class="num" data-actual={fmtCurrency(actual?.totalContributions ?? 0)} data-normalized={fmtCurrency(normalized?.totalContributions ?? 0)}>
-                {fmtCurrency(actual?.totalContributions ?? 0)}
+              <td class="num">{fmtCurrency(view?.totalContributions ?? 0)}</td>
+              <td class="num">{fmtCurrency(view?.portfolioValue ?? 0)}</td>
+              <td class="num">{fmtCurrency(view?.benchmarkValue ?? 0)}</td>
+              <td class:list={["num", (view?.portfolioTR ?? 0) >= 0 ? "positive" : "negative"]}>
+                {fmtPct(view?.portfolioTR ?? 0)}
               </td>
-              <td class="num" data-actual={fmtCurrency(actual?.portfolioValue ?? 0)} data-normalized={fmtCurrency(normalized?.portfolioValue ?? 0)}>
-                {fmtCurrency(actual?.portfolioValue ?? 0)}
+              <td class:list={["num", (view?.benchmarkTR ?? 0) >= 0 ? "positive" : "negative"]}>
+                {fmtPct(view?.benchmarkTR ?? 0)}
               </td>
-              <td class="num" data-actual={fmtCurrency(actual?.benchmarkValue ?? 0)} data-normalized={fmtCurrency(normalized?.benchmarkValue ?? 0)}>
-                {fmtCurrency(actual?.benchmarkValue ?? 0)}
-              </td>
-              <td class:list={["num", (actual?.portfolioTR ?? 0) >= 0 ? "positive" : "negative"]}>
-                {fmtPct(actual?.portfolioTR ?? 0)}
-              </td>
-              <td class:list={["num", (actual?.benchmarkTR ?? 0) >= 0 ? "positive" : "negative"]}>
-                {fmtPct(actual?.benchmarkTR ?? 0)}
-              </td>
-              <td class:list={["num", (actual?.alpha ?? 0) >= 0 ? "positive" : "negative"]}>
-                {fmtPct(actual?.alpha ?? 0)}
+              <td class:list={["num", (view?.alpha ?? 0) >= 0 ? "positive" : "negative"]}>
+                {fmtPct(view?.alpha ?? 0)}
               </td>
               <td class="num">
-                {actual?.portfolioCagr != null ? (
-                  <span class:list={(actual.portfolioCagr >= 0) ? "positive" : "negative"}>
-                    {fmtPct(actual.portfolioCagr)}
+                {view?.portfolioCagr != null ? (
+                  <span class:list={view.portfolioCagr >= 0 ? "positive" : "negative"}>
+                    {fmtPct(view.portfolioCagr)}
                   </span>
                 ) : (
                   <span class="suppressed" title="CAGR shown only after 1 year of data to avoid misleading annualization.">—</span>
@@ -88,69 +77,38 @@ const normalized = stats?.normalized ?? null;
       <div class="stat-grid mobile-only">
         <div class="stat-cell">
           <span class="stat-label">Total Invested</span>
-          <span class="stat-value" data-actual={fmtCurrency(actual?.totalContributions ?? 0)} data-normalized={fmtCurrency(normalized?.totalContributions ?? 0)}>
-            {fmtCurrency(actual?.totalContributions ?? 0)}
-          </span>
+          <span class="stat-value">{fmtCurrency(view?.totalContributions ?? 0)}</span>
         </div>
         <div class="stat-cell">
           <span class="stat-label">Portfolio Value</span>
-          <span class="stat-value" data-actual={fmtCurrency(actual?.portfolioValue ?? 0)} data-normalized={fmtCurrency(normalized?.portfolioValue ?? 0)}>
-            {fmtCurrency(actual?.portfolioValue ?? 0)}
-          </span>
+          <span class="stat-value">{fmtCurrency(view?.portfolioValue ?? 0)}</span>
         </div>
         <div class="stat-cell">
           <span class="stat-label">Benchmark Value</span>
-          <span class="stat-value" data-actual={fmtCurrency(actual?.benchmarkValue ?? 0)} data-normalized={fmtCurrency(normalized?.benchmarkValue ?? 0)}>
-            {fmtCurrency(actual?.benchmarkValue ?? 0)}
-          </span>
+          <span class="stat-value">{fmtCurrency(view?.benchmarkValue ?? 0)}</span>
         </div>
         <div class="stat-cell">
           <span class="stat-label">Portfolio TR</span>
-          <span class:list={["stat-value", (actual?.portfolioTR ?? 0) >= 0 ? "positive" : "negative"]}>
-            {fmtPct(actual?.portfolioTR ?? 0)}
+          <span class:list={["stat-value", (view?.portfolioTR ?? 0) >= 0 ? "positive" : "negative"]}>
+            {fmtPct(view?.portfolioTR ?? 0)}
           </span>
         </div>
         <div class="stat-cell">
           <span class="stat-label">S&P 500 TR</span>
-          <span class:list={["stat-value", (actual?.benchmarkTR ?? 0) >= 0 ? "positive" : "negative"]}>
-            {fmtPct(actual?.benchmarkTR ?? 0)}
+          <span class:list={["stat-value", (view?.benchmarkTR ?? 0) >= 0 ? "positive" : "negative"]}>
+            {fmtPct(view?.benchmarkTR ?? 0)}
           </span>
         </div>
         <div class="stat-cell">
           <span class="stat-label">Alpha</span>
-          <span class:list={["stat-value", (actual?.alpha ?? 0) >= 0 ? "positive" : "negative"]}>
-            {fmtPct(actual?.alpha ?? 0)}
+          <span class:list={["stat-value", (view?.alpha ?? 0) >= 0 ? "positive" : "negative"]}>
+            {fmtPct(view?.alpha ?? 0)}
           </span>
         </div>
       </div>
     </div>
   )}
 </section>
-
-<script>
-  document.addEventListener("viewchange", (e: Event) => {
-    const { view } = (e as CustomEvent<{ view: string }>).detail;
-    const wrap = document.getElementById("portfolio-table-wrap");
-    const label = document.getElementById("portfolio-label");
-    if (!wrap || !label) return;
-
-    // Update label
-    label.textContent = label.dataset[view as "actual" | "normalized"] ?? "";
-
-    // Update dollar cells in table (td) and stat grid (span) that have data-actual/normalized
-    wrap.querySelectorAll<HTMLElement>("td[data-actual], span[data-actual]").forEach((el) => {
-      const val = view === "normalized" ? el.dataset.normalized : el.dataset.actual;
-      if (val != null) el.textContent = val;
-    });
-  });
-
-  // Apply initial view from URL on load
-  const params = new URLSearchParams(window.location.search);
-  const initial = params.get("view") === "normalized" ? "normalized" : "actual";
-  if (initial === "normalized") {
-    document.dispatchEvent(new CustomEvent("viewchange", { detail: { view: "normalized" } }));
-  }
-</script>
 
 <style>
   .portfolio-section {

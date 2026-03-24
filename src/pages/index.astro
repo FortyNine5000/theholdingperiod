@@ -6,7 +6,6 @@ import Footer from "../components/Footer.astro";
 import SEOHead from "../components/SEOHead.astro";
 import Explainer from "../components/Explainer.astro";
 import PicksTable from "../components/PicksTable.astro";
-import PortfolioToggle from "../components/PortfolioToggle.astro";
 import PortfolioTable from "../components/PortfolioTable.astro";
 import NewsletterSignup from "../components/NewsletterSignup.astro";
 import { homePageMeta } from "../lib/seo/meta.js";
@@ -52,7 +51,6 @@ const meta = homePageMeta();
       <PicksTable picks={computedPicks ?? []} lastRefresh={lastRefresh} />
 
       <!-- Portfolio -->
-      <PortfolioToggle />
       <PortfolioTable stats={portfolio} />
 
       <!-- Newsletter -->
