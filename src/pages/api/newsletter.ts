@@ -47,7 +47,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     if (!res.ok) {
       const text = await res.text();
       console.error(`[newsletter] Kit API error ${res.status}: ${text}`);
-      return json({ success: false, code: "kit_error" }, 500);
+      return json({ success: false, code: "kit_error", status: res.status, detail: text }, 500);
     }
 
     return json({ success: true }, 200);
