@@ -11,7 +11,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     return json({ success: false, code: "runtime_unavailable" }, 500);
   }
 
-  let body: { name?: string; email?: string; website?: string };
+  let body: { email?: string; website?: string };
   try {
     body = await request.json();
   } catch {
@@ -28,36 +28,26 @@ export const POST: APIRoute = async ({ request, locals }) => {
     return json({ success: false, error: "Email required" }, 400);
   }
 
-  const apiKey = env.BEEHIIV_API_KEY;
-  const publicationId = env.BEEHIIV_PUBLICATION_ID;
-
-  if (!apiKey || !publicationId) {
-    console.error("[newsletter] Missing BEEHIIV_API_KEY or BEEHIIV_PUBLICATION_ID env vars");
+  const apiSecret = env.KIT_API_SECRET;
+  if (!apiSecret) {
+    console.error("[newsletter] Missing KIT_API_SECRET env var");
     return json({ success: false, code: "missing_env" }, 500);
   }
 
-  // TODO: Add double-opt-in confirmation email here (Beehiiv's send_welcome_email handles basic welcome)
-
-  const beehiivUrl = `https://api.beehiiv.com/v2/publications/${publicationId}/subscriptions`;
-
   try {
-    const res = await fetch(beehiivUrl, {
+    const res = await fetch("https://api.kit.com/v4/subscribers", {
       method: "POST",
       headers: {
-        "Authorization": `ApiKey ${apiKey}`,
+        "Authorization": `Bearer ${apiSecret}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        email,
-        reactivate_existing: true,
-        send_welcome_email: true,
-      }),
+      body: JSON.stringify({ email_address: email }),
     });
 
     if (!res.ok) {
       const text = await res.text();
-      console.error(`[newsletter] Beehiiv API error ${res.status}: ${text}`);
-      return json({ success: false, code: "beehiiv_error", status: res.status, detail: text }, 500);
+      console.error(`[newsletter] Kit API error ${res.status}: ${text}`);
+      return json({ success: false, code: "kit_error" }, 500);
     }
 
     return json({ success: true }, 200);
