@@ -25,14 +25,6 @@
 
       <div class="form-row">
         <input
-          type="text"
-          name="name"
-          id="nl-name"
-          placeholder="Your name"
-          autocomplete="given-name"
-          required
-        />
-        <input
           type="email"
           name="email"
           id="nl-email"
@@ -58,10 +50,8 @@
 
     const data = new FormData(form);
     const payload = {
-      name: (data.get("name") as string ?? "").trim(),
       email: (data.get("email") as string ?? "").trim(),
-      // honeypot
-      website: (data.get("website") as string ?? "").trim(),
+      website: (data.get("website") as string ?? "").trim(), // honeypot
     };
 
     if (!payload.email) {

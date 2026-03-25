@@ -126,6 +126,7 @@ export function computePortfolio(
 
   let portfolioValue = 0;
   let benchmarkValue = 0;
+  let processedCount = 0;
   let earliestEntryDate: string | null = null;
 
   for (const pick of picks) {
@@ -158,13 +159,14 @@ export function computePortfolio(
       pickSeries[pickSeries.length - 1]?.adjClose ?? entryPrice;
     portfolioValue += shares * currentPickPrice;
     benchmarkValue += benchmarkUnits * latestBenchmark.adjClose;
+    processedCount += 1;
 
     if (!earliestEntryDate || entryDate < earliestEntryDate) {
       earliestEntryDate = entryDate;
     }
   }
 
-  const totalContributions = picks.length * CONTRIBUTION_USD;
+  const totalContributions = processedCount * CONTRIBUTION_USD;
   const portfolioTR =
     totalContributions > 0 ? portfolioValue / totalContributions - 1 : 0;
   const benchmarkTR =
