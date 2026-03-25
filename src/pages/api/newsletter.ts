@@ -28,20 +28,17 @@ export const POST: APIRoute = async ({ request, locals }) => {
     return json({ success: false, error: "Email required" }, 400);
   }
 
-  const apiSecret = env.KIT_API_SECRET;
-  if (!apiSecret) {
-    console.error("[newsletter] Missing KIT_API_SECRET env var");
+  const apiKey = env.KIT_API_KEY;
+  if (!apiKey) {
+    console.error("[newsletter] Missing KIT_API_KEY env var");
     return json({ success: false, code: "missing_env" }, 500);
   }
 
   try {
-    const res = await fetch("https://api.kit.com/v4/subscribers", {
+    const res = await fetch("https://api.convertkit.com/v3/forms/9248994/subscribe", {
       method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiSecret}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email_address: email }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ api_key: apiKey, email }),
     });
 
     if (!res.ok) {
