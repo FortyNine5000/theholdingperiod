@@ -3,7 +3,13 @@ import type { APIRoute } from "astro";
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  const env = locals.runtime.env;
+  let env: Record<string, string | undefined>;
+  try {
+    env = locals.runtime.env as Record<string, string | undefined>;
+  } catch (err) {
+    console.error("[newsletter] locals.runtime.env unavailable:", err);
+    return json({ success: false, code: "runtime_unavailable" }, 500);
+  }
 
   let body: { name?: string; email?: string; website?: string };
   try {
@@ -27,7 +33,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
   if (!apiKey || !publicationId) {
     console.error("[newsletter] Missing BEEHIIV_API_KEY or BEEHIIV_PUBLICATION_ID env vars");
-    return json({ success: false }, 500);
+    return json({ success: false, code: "missing_env" }, 500);
   }
 
   // TODO: Add double-opt-in confirmation email here (Beehiiv's send_welcome_email handles basic welcome)
@@ -51,14 +57,13 @@ export const POST: APIRoute = async ({ request, locals }) => {
     if (!res.ok) {
       const text = await res.text();
       console.error(`[newsletter] Beehiiv API error ${res.status}: ${text}`);
-      // Never expose raw API error to client
-      return json({ success: false }, 500);
+      return json({ success: false, code: "beehiiv_error" }, 500);
     }
 
     return json({ success: true }, 200);
   } catch (err) {
     console.error("[newsletter] Fetch error:", err);
-    return json({ success: false }, 500);
+    return json({ success: false, code: "fetch_error" }, 500);
   }
 };
 
