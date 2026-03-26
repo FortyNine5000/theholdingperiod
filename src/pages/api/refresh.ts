@@ -103,40 +103,44 @@ async function runRefresh(env: Env): Promise<{
   return { sources, timestamp };
 }
 
-// Manual POST endpoint (protected by REFRESH_SECRET)
-export const POST: APIRoute = async ({ request, locals }) => {
-  const env = locals.runtime.env;
-  const secret = env.REFRESH_SECRET;
-
+function authorize(secret: string, request: Request): boolean {
+  // Accept Bearer token in Authorization header OR ?secret= query param
   const authHeader = request.headers.get("Authorization") ?? "";
-  if (!authHeader.startsWith("Bearer ") || authHeader.slice(7) !== secret) {
+  if (authHeader.startsWith("Bearer ") && authHeader.slice(7) === secret) return true;
+  const url = new URL(request.url);
+  if (url.searchParams.get("secret") === secret) return true;
+  return false;
+}
+
+async function handleRefresh(env: Env, request: Request): Promise<Response> {
+  const secret = env.REFRESH_SECRET;
+  if (!authorize(secret, request)) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
       headers: { "Content-Type": "application/json" },
     });
   }
-
   try {
     const result = await runRefresh(env);
-    return new Response(
-      JSON.stringify({ success: true, ...result }),
-      {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    return new Response(JSON.stringify({ success: true, ...result }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     console.error("[refresh] Failed:", message);
-    return new Response(
-      JSON.stringify({ success: false, error: message }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    return new Response(JSON.stringify({ success: false, error: message }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
-};
+}
+
+export const GET: APIRoute = ({ request, locals }) =>
+  handleRefresh(locals.runtime.env, request);
+
+export const POST: APIRoute = ({ request, locals }) =>
+  handleRefresh(locals.runtime.env, request);
 
 // Export runRefresh for use by the scheduled cron handler
 export { runRefresh };
