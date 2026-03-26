@@ -98,7 +98,7 @@ export const picks: Pick[] = [
     ticker: "DHR",
     companyName: "Danaher Corporation",
     quarterLabel: "2026 Q1",
-    quarterEnd: "2026-03-31",
+    quarterEnd: "2026-03-26",
     pageTitle: "Danaher (DHR) — 2026 Q1 Pick | The Holding Period",
     metaDescription:
       "Danaher Corporation named as The Holding Period's Q1 2026 long-term stock pick. 25-year hold thesis: the Danaher Business System applied to life sciences secular growth. Tracked vs S&P 500 Total Return from March 2026.",
