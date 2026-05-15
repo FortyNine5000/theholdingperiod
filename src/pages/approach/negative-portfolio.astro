@@ -1,0 +1,239 @@
+---
+export const prerender = true;
+
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import SEOHead from "../../components/SEOHead.astro";
+import { approachPageMeta } from "../../lib/seo/meta.js";
+import "../../styles/global.css";
+
+const meta = approachPageMeta("negative-portfolio");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEOHead meta={meta} />
+  </head>
+  <body>
+    <Header breadcrumbs={[
+      { label: "Home", href: "/" },
+      { label: "Investment Approach" },
+      { label: "The Negative Portfolio" },
+    ]} />
+
+    <main class="page-main">
+      <article class="prose">
+        <header class="article-header">
+          <h1>The Negative Portfolio</h1>
+          <p class="article-desc">
+            Subtraction starts with inversion: remove the businesses where time is not an ally.
+          </p>
+        </header>
+
+        <section class="prose-section">
+          <h2>The base rate case for subtraction</h2>
+          <p>
+            Long-run equity returns are power-law distributed. A small number of businesses
+            account for essentially all net market wealth creation over long horizons; most
+            individual stocks underperform cash over their full lives.
+          </p>
+          <p>
+            This creates two asymmetric tasks. Predicting which businesses will be in the rare
+            right tail 25 years from now is genuinely hard — the evidence is that even the
+            best-informed investors are right only a fraction of the time. But identifying
+            businesses with a high probability of destroying capital is often more tractable.
+            The left-tail characteristics — debt brittleness, cyclicality mistaken for secular
+            growth, substrate obsolescence — tend to be visible earlier and with more certainty
+            than right-tail characteristics.
+          </p>
+          <p>
+            The Negative Portfolio is the systematic attempt to exploit that asymmetry. It is not
+            a claim that negative selection always outperforms positive selection. It is a claim
+            that removing high-probability destroyers, while preserving enough breadth to capture
+            the eventual right-tail winners, is a tractable and complementary research task.
+          </p>
+        </section>
+
+        <section class="prose-section">
+          <h2>The Subtraction Framework</h2>
+          <p>
+            The negative screens identify candidates for removal from a broad equity universe.
+            Eight screens define the initial removal candidates: deteriorating net income trajectory
+            on a trailing multi-year basis; weak organic growth quality, where revenue growth is
+            driven by acquisition or currency rather than unit economics; declining return on assets
+            over a three-to-five-year window; a negative spread between ROIC and estimated WACC;
+            worsening leverage, particularly in cyclical businesses; weak free-cash-flow conversion
+            relative to reported earnings; customer concentration above 30% in a single payer or
+            counterparty; and capital-infusion dependence — businesses that require ongoing external
+            capital to fund operations.
+          </p>
+          <p>
+            A business that fails two or more screens without a clear temporary explanation moves
+            onto the removal list. The framework is a starting filter, not a final answer. Judgment
+            determines whether a screen result reflects genuine deterioration or a temporary
+            accounting artifact.
+          </p>
+        </section>
+
+        <section class="prose-section">
+          <h2>The Failure Library</h2>
+          <p>
+            The Failure Library is the negative image of the compounder framework — a taxonomy of
+            the ways apparently attractive, high-ROIC businesses become permanent capital mistakes.
+            Most investment writing collects winners. The Failure Library collects the base rates
+            investors prefer to ignore.
+          </p>
+          <p>
+            The 16 failure patterns: substrate obsolescence — the business is built on a physical
+            or technological substrate that is being replaced. Payer / price-setter compression —
+            returns depend on a concentrated payer who gradually extracts more of the value.
+            Reinvestment-runway exhaustion — the business is excellent but has run out of places to
+            deploy capital at attractive incremental returns. Capital-allocation culture destruction
+            — the founder's discipline is replaced by operators who optimize for scale or reported
+            earnings.
+          </p>
+          <p>
+            Balance-sheet time bomb — debt that is manageable in normal conditions but fatal in
+            stress. Roll-up accounting optics — EBITDA growth that does not reflect underlying
+            economic returns. Cyclicality mistaken for secular growth — a long upcycle interpreted
+            as structural advantage. Brand without pricing mechanism — high recognition without a
+            structural mechanism translating brand into durable pricing power.
+          </p>
+          <p>
+            Culture destroyed by leadership transition — the transformative leader leaves and the
+            cultural practices that produced prior results are not maintained. Category
+            commoditization — a differentiated product or service becomes a commodity as production
+            technology diffuses. Network-effect reversal — a business with genuine network effects
+            loses critical mass and the network begins to shrink. Accounting / governance blowup —
+            reported economics that were not real.
+          </p>
+          <p>
+            Terminal-value illusion — valued as if current economics continue indefinitely when the
+            competitive position is already eroding. Platform-tax compression — a more powerful
+            platform enters the same position and charges a lower toll. Founder-dependence reversal
+            — the competitive position is inseparable from a single person who eventually leaves.
+            Demographic / policy tailwind reversal — a multi-decade tailwind mistaken for
+            competitive advantage.
+          </p>
+        </section>
+
+        <section class="prose-section">
+          <h2>The Bessemer Converter</h2>
+          <p>
+            Inversion produces a sharper starting point than selection. Before asking which
+            businesses deserve more work, ask which businesses should stop the analysis
+            immediately.
+          </p>
+          <p>
+            The 15-minute rule: if any of the following appear in the first pass, research ends.
+            Debt brittleness — a balance sheet that cannot survive a two-year revenue contraction
+            without covenant breach or equity issuance. Cyclicality mistaken for secular growth —
+            revenue that tracks end-market volumes but is framed as a structural compounder.
+            Substrate obsolescence — a physical or regulatory substrate that has a visible,
+            better-capitalized replacement already scaling.
+          </p>
+          <p>
+            Capital-allocation red flags stop work at the next stage: high asset growth that
+            outpaces revenue growth over five years; acquisition camouflage, where EBITDA grows
+            but free cash flow does not; ROIC below WACC on a through-cycle basis.
+          </p>
+          <p>
+            Epistemological no-go zones are businesses where the most important variables are
+            genuinely unknowable in a 25-year frame: businesses fully exposed to commoditization
+            of their core product, regulatory businesses where the next policy ruling is
+            unpredictable and material, and businesses in jurisdictions with high political
+            expropriation risk.
+          </p>
+        </section>
+
+        <aside class="related">
+          <h3>Related research</h3>
+          <ul>
+            <li><a href="/research/subtraction-framework/">→&nbsp;The Subtraction Framework</a></li>
+            <li><a href="/research/failure-library/">→&nbsp;The Failure Library</a></li>
+            <li><a href="/research/return-concentration/">→&nbsp;Why the Market's Long-Run Gains Come From a Few Unusual Stocks</a></li>
+          </ul>
+        </aside>
+      </article>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .page-main {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2rem var(--page-pad) 4rem;
+  }
+  .prose {
+    max-width: 680px;
+  }
+  .article-header {
+    padding: 2rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+  }
+  .article-header h1 {
+    font-size: clamp(1.375rem, 4vw, 1.875rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.75rem;
+    color: var(--text);
+  }
+  .article-desc {
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .prose-section {
+    margin-bottom: 2.25rem;
+  }
+  .prose-section h2 {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 0.875rem;
+    letter-spacing: -0.01em;
+  }
+  .prose-section p {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin: 0 0 0.875rem;
+  }
+  .prose-section p:last-child {
+    margin-bottom: 0;
+  }
+  .related {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .related h3 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+  .related ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .related a {
+    font-size: 0.875rem;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .related a:hover {
+    text-decoration: underline;
+  }
+</style>

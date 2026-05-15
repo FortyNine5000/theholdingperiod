@@ -1,0 +1,79 @@
+---
+export const prerender = false;
+
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import SEOHead from "../../components/SEOHead.astro";
+import PicksTable from "../../components/PicksTable.astro";
+import PortfolioTable from "../../components/PortfolioTable.astro";
+import { ledgerPageMeta } from "../../lib/seo/meta.js";
+import { getComputedPicks, getComputedPortfolio, getLastRefresh } from "../../lib/store.js";
+import "../../styles/global.css";
+
+const kv = Astro.locals.runtime.env.HOLDING_PERIOD_KV;
+
+const [computedPicks, portfolio, lastRefresh] = await Promise.all([
+  getComputedPicks(kv),
+  getComputedPortfolio(kv),
+  getLastRefresh(kv),
+]);
+
+const meta = ledgerPageMeta();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEOHead meta={meta} />
+  </head>
+  <body>
+    <Header breadcrumbs={[
+      { label: "Home", href: "/" },
+      { label: "Public Ledger" },
+    ]} />
+
+    <main class="page-main">
+      <div class="ledger-intro">
+        <h1>Public Ledger</h1>
+        <p>
+          The public ledger is not the product. It is the audit trail. Each named stock enters
+          the record for a 25-year hold from the date it is named. The entry price, entry date,
+          and investment case are recorded. Future thesis updates may revise the assessment, but
+          the original name never leaves the record. Drawdowns, mistakes, and underperformance
+          stay visible.
+        </p>
+      </div>
+
+      <PicksTable picks={computedPicks ?? []} lastRefresh={lastRefresh} />
+      <PortfolioTable stats={portfolio} />
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .page-main {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2rem var(--page-pad) 4rem;
+  }
+  .ledger-intro {
+    max-width: 640px;
+    padding: 2rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .ledger-intro h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.75rem;
+    color: var(--text);
+  }
+  .ledger-intro p {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+  }
+</style>

@@ -1,0 +1,280 @@
+---
+export const prerender = true;
+
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import SEOHead from "../../components/SEOHead.astro";
+import { approachPageMeta } from "../../lib/seo/meta.js";
+import "../../styles/global.css";
+
+const meta = approachPageMeta("25-year-hold-thesis");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEOHead meta={meta} />
+  </head>
+  <body>
+    <Header breadcrumbs={[
+      { label: "Home", href: "/" },
+      { label: "Investment Approach" },
+      { label: "The 25-Year Hold Thesis" },
+    ]} />
+
+    <main class="page-main">
+      <article class="prose">
+        <header class="article-header">
+          <h1>The 25-Year Hold Thesis</h1>
+          <p class="article-desc">
+            The process starts by asking what can break, not what can go right.
+          </p>
+        </header>
+
+        <section class="prose-section">
+          <h2>Filter 1 — Survival First</h2>
+          <p>
+            A business that does not survive cannot compound. Survival analysis comes before any
+            assessment of upside.
+          </p>
+          <p>
+            The criteria: debt must be manageable at stressed operating conditions with no fragile
+            maturity wall. No single customer, regulator, payer, or counterparty should account
+            for more than 30% of revenue. No clear substrate-change risk from a better alternative
+            already at scale. Governance must be clean — no restatements, no undisclosed
+            related-party transactions. The business should be able to withstand a 30% unit-volume
+            decline over two years without permanent balance-sheet impairment.
+          </p>
+          <p>
+            Candidates that do not pass survival analysis do not advance to deeper work. The
+            analysis is not a formality.
+          </p>
+        </section>
+
+        <section class="prose-section">
+          <h2>Filter 2 — Name the Mechanism</h2>
+          <p>
+            "Quality" is not enough. High ROIC is an output, not an explanation. The process
+            requires a named structural mechanism: a specific, identifiable source of competitive
+            defense that a well-capitalized competitor could not replicate within five years.
+          </p>
+          <p>
+            The recognized mechanism types: operational switching cost — the cost to the customer
+            of changing suppliers is embedded in their processes, not just their contracts.
+            Regulatory enshrinement — the business occupies a position that regulation makes
+            difficult or impossible to replicate. Network effect — the service becomes more
+            valuable as adoption grows, creating a compounding user-side barrier. Physical density
+            — local network depth that requires years of capital deployment to build. Keystone data
+            asset — a proprietary dataset that improves with use and cannot be reconstructed from
+            public sources. Contractual tollbooth — recurring revenue from a position in a value
+            chain that is difficult to bypass. Workflow integration — deep embedding in customer
+            operations that makes the cost of switching visible and high. Benchmark embedding —
+            the service has become the standard reference that competing products must be evaluated
+            against.
+          </p>
+          <p>
+            Silent substitutability is not a moat. If a competitor can replicate the customer
+            experience without replicating the structural position, the mechanism has not been
+            named.
+          </p>
+        </section>
+
+        <section class="prose-section">
+          <h2>Filter 3 — Reinvestment Runway</h2>
+          <p>
+            An excellent business with no place to deploy capital is a cash cow, not a 25-year
+            compounder. The process requires evidence of a plausible 15-plus-year reinvestment
+            runway where incremental capital can earn returns above the cost of capital.
+          </p>
+          <p>
+            Incremental returns on incremental capital — ROIIC — matter more than legacy ROIC.
+            A business with 30% ROIC on its existing asset base but declining returns on new
+            investment is consuming, not building, its competitive position. The unit-growth model
+            is required: how many more units can be added, at what incremental return, over what
+            timeframe.
+          </p>
+          <p>
+            Mature capital return — buybacks and dividends — should be additive to the thesis,
+            not a substitute for missing reinvestment. A business that returns capital because
+            it has no better use for it is different from a business that returns capital after
+            exhausting its highest-return reinvestment opportunities.
+          </p>
+        </section>
+
+        <section class="prose-section">
+          <h2>Filter 4 — Underwriting</h2>
+          <p>
+            Quality does not cancel price. Every candidate must clear the valuation gate on two
+            independent tests: the base-case 25-year IRR must be at least 8% on EPS per share,
+            and the base-case 25-year IRR must be at least 8% on free cash flow per share. Both
+            tests must pass independently. Strong earnings numbers do not compensate for weak
+            free-cash-flow numbers.
+          </p>
+          <p>
+            The underwriting must include bear, base, and bull cases that are explicitly different
+            from each other. The terminal multiple must decline from the current multiple — assuming
+            today's multiple persists for 25 years is not a model, it is an assumption dressed as
+            analysis. The thesis must include an ex-ante falsification condition: a specific,
+            observable event that would indicate the thesis is broken.
+          </p>
+        </section>
+
+        <section class="prose-section">
+          <h2>The No-Pick Rule</h2>
+          <p>
+            The quarterly cadence is a commitment device, not a quota. If no candidate clears all
+            four filters and the underwriting bar, the correct name is no name. The ledger records
+            the skipped quarter and the reason.
+          </p>
+          <p>
+            A skipped quarter is not a failure. It is evidence that the process is not being
+            forced.
+          </p>
+        </section>
+
+        <section class="prose-section">
+          <h2>The Good Business / Bad Entry Rule</h2>
+          <p>
+            A business can pass the quality work and fail the price work. That is not a near miss.
+            It is a watchlist item with a trigger price. Naming it at a price that does not clear
+            the IRR hurdle would make the underwriting meaningless.
+          </p>
+          <p>
+            Good businesses at the wrong price appear in the subscriber short list with the
+            trigger price noted. They do not appear in the public ledger.
+          </p>
+        </section>
+
+        <section class="prose-section">
+          <h2>The Insufficient Underwriting Rule</h2>
+          <p>
+            Missing evidence is not rounded up into conviction. If primary-source evidence is
+            absent on a material point — customer retention data at scale, unit economics under
+            stress, management track record through a full cycle — the candidate cannot be named
+            regardless of how compelling the narrative is.
+          </p>
+          <p>
+            The narrative is a hypothesis. The evidence is the test. A compelling hypothesis
+            without the evidence to support it is a watchlist item, not a name.
+          </p>
+        </section>
+
+        <aside class="related">
+          <h3>Related research</h3>
+          <ul>
+            <li><a href="/research/long-duration-compounder-framework/">→&nbsp;The Long-Duration Compounder Framework</a></li>
+            <li><a href="/research/no-pick-rule/">→&nbsp;The No-Pick Rule</a></li>
+            <li><a href="/research/drawdown-discipline/">→&nbsp;Drawdown Discipline</a></li>
+            <li><a href="/research/orientation-audit/">→&nbsp;The Orientation Audit</a></li>
+          </ul>
+        </aside>
+
+        <aside class="ledger-ref">
+          <p>
+            The public ledger is not the product. It is the audit trail. Every name entered
+            since the first quarter remains on record for 25 years, including drawdowns and
+            mistakes, because the commitment only matters if it cannot be revised after the fact.
+          </p>
+          <a href="/ledger/">Public ledger →</a>
+        </aside>
+      </article>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .page-main {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2rem var(--page-pad) 4rem;
+  }
+  .prose {
+    max-width: 680px;
+  }
+  .article-header {
+    padding: 2rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+  }
+  .article-header h1 {
+    font-size: clamp(1.375rem, 4vw, 1.875rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.75rem;
+    color: var(--text);
+  }
+  .article-desc {
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .prose-section {
+    margin-bottom: 2.25rem;
+  }
+  .prose-section h2 {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 0.875rem;
+    letter-spacing: -0.01em;
+  }
+  .prose-section p {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin: 0 0 0.875rem;
+  }
+  .prose-section p:last-child {
+    margin-bottom: 0;
+  }
+  .related {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .related h3 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+  .related ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .related a {
+    font-size: 0.875rem;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .related a:hover {
+    text-decoration: underline;
+  }
+  .ledger-ref {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .ledger-ref p {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+  }
+  .ledger-ref a {
+    font-size: 0.875rem;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .ledger-ref a:hover {
+    text-decoration: underline;
+  }
+</style>

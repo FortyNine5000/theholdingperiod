@@ -2,6 +2,7 @@ import { SITE_URL } from "../config.js";
 import type { Pick } from "../../content/picks.js";
 import type { PickStats } from "../data/types.js";
 import type { Topic } from "../../content/topics.js";
+import type { ResearchArticle } from "../../content/research.js";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -51,10 +52,9 @@ export function breadcrumbSchema(items: BreadcrumbItem[]): Record<string, unknow
 
 export function homePageMeta(): PageMeta {
   return {
-    title:
-      "The Holding Period — Quarterly Stock Picks vs S&P 500 Total Return | 25-Year Log",
+    title: "The Holding Period — Long-Duration Equity Research",
     description:
-      "A public log of quarterly stock picks held for 25 years, tracking total return against the S&P 500 Total Return index. One pick per quarter. No rebalancing. Every pick public from day one.",
+      "A search for what may be worth holding for 25 years, and an attempt to define what is not. Long-duration public equity research built on Bessembinder's return-concentration findings.",
     canonical: SITE_URL,
     ogImage: DEFAULT_OG_IMAGE,
     ogType: "website",
@@ -66,7 +66,7 @@ export function homePageMeta(): PageMeta {
         url: SITE_URL,
         name: "The Holding Period",
         description:
-          "Quarterly stock picks held 25 years, tracked against the S&P 500 Total Return index.",
+          "Long-duration public equity research platform. Quarterly names held 25 years, tracked against the S&P 500 Total Return index.",
       },
       {
         "@context": "https://schema.org",
@@ -244,6 +244,81 @@ export function faqPageMeta(): PageMeta {
     breadcrumbs: [
       { name: "Home", url: SITE_URL },
       { name: "FAQ" },
+    ],
+  };
+}
+
+export function researchIndexMeta(): PageMeta {
+  return {
+    title: "Research — The Holding Period",
+    description:
+      "Frameworks, company studies, and evidence files for long-duration public equity research. The archive is meant to compound.",
+    canonical: `${SITE_URL}/research/`,
+    ogImage: DEFAULT_OG_IMAGE,
+    ogType: "website",
+    breadcrumbs: [
+      { name: "Home", url: SITE_URL },
+      { name: "Research" },
+    ],
+  };
+}
+
+export function researchArticleMeta(article: ResearchArticle): PageMeta {
+  const canonical = `${SITE_URL}/research/${article.slug}/`;
+  return {
+    title: `${article.title} — The Holding Period`,
+    description: article.description,
+    canonical,
+    ogImage: DEFAULT_OG_IMAGE,
+    ogType: "article",
+    breadcrumbs: [
+      { name: "Home", url: SITE_URL },
+      { name: "Research", url: `${SITE_URL}/research/` },
+      { name: article.title },
+    ],
+  };
+}
+
+export function approachPageMeta(
+  page: "25-year-hold-thesis" | "negative-portfolio"
+): PageMeta {
+  const titles = {
+    "25-year-hold-thesis": "The 25-Year Hold Thesis",
+    "negative-portfolio": "The Negative Portfolio",
+  };
+  const descriptions = {
+    "25-year-hold-thesis":
+      "Four filters for 25-year equity selection: Survival, Named Mechanism, Reinvestment Runway, and Underwriting. Plus the No-Pick Rule and Drawdown Discipline.",
+    "negative-portfolio":
+      "The Subtraction Framework and Failure Library: 16 patterns by which apparently durable businesses become permanent capital mistakes.",
+  };
+  const title = titles[page];
+  const canonical = `${SITE_URL}/approach/${page}/`;
+  return {
+    title: `${title} — The Holding Period`,
+    description: descriptions[page],
+    canonical,
+    ogImage: DEFAULT_OG_IMAGE,
+    ogType: "article",
+    breadcrumbs: [
+      { name: "Home", url: SITE_URL },
+      { name: "Investment Approach" },
+      { name: title },
+    ],
+  };
+}
+
+export function ledgerPageMeta(): PageMeta {
+  return {
+    title: "Public Ledger — The Holding Period",
+    description:
+      "The public record of every quarterly name. The ledger is not the product. It is the audit trail. Every pick tracked against the S&P 500 Total Return index.",
+    canonical: `${SITE_URL}/ledger/`,
+    ogImage: DEFAULT_OG_IMAGE,
+    ogType: "website",
+    breadcrumbs: [
+      { name: "Home", url: SITE_URL },
+      { name: "Public Ledger" },
     ],
   };
 }

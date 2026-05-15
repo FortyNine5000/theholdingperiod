@@ -1,24 +1,10 @@
 ---
-export const prerender = false;
+export const prerender = true;
 
-import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import SEOHead from "../components/SEOHead.astro";
-import Explainer from "../components/Explainer.astro";
-import PicksTable from "../components/PicksTable.astro";
-import PortfolioTable from "../components/PortfolioTable.astro";
-import NewsletterSignup from "../components/NewsletterSignup.astro";
 import { homePageMeta } from "../lib/seo/meta.js";
-import { getComputedPicks, getComputedPortfolio, getLastRefresh } from "../lib/store.js";
 import "../styles/global.css";
-
-const kv = Astro.locals.runtime.env.HOLDING_PERIOD_KV;
-
-const [computedPicks, portfolio, lastRefresh] = await Promise.all([
-  getComputedPicks(kv),
-  getComputedPortfolio(kv),
-  getLastRefresh(kv),
-]);
 
 const meta = homePageMeta();
 ---
@@ -29,39 +15,31 @@ const meta = homePageMeta();
     <SEOHead meta={meta} />
   </head>
   <body>
-    <Header />
+    <main>
+      <h1>The Holding Period</h1>
 
-    <main class="page-main">
-      <!-- Hero -->
-      <section class="hero">
-        <h1 class="hero-headline">
-          One stock per quarter. Hold 25 years.
-        </h1>
-        <p class="hero-sub">
-          This is a public log of long-term equity picks, tracked against the S&amp;P 500 Total
-          Return index.
-        </p>
-        <a href="/about" class="hero-link">Read the methodology →</a>
-      </section>
+      <hr>
 
-      <!-- Explainer -->
-      <Explainer />
+      <p>
+        Most stocks do not create lasting wealth. Hendrik Bessembinder's research shows that over
+        long periods, more than half of public companies have negative lifetime returns, while a
+        very small number of exceptional businesses drive nearly all market wealth creation. The
+        Holding Period is a search for what may be worth holding for 25 years and an attempt to
+        define what is not.
+      </p>
 
-      <!-- Picks Table -->
-      <PicksTable picks={computedPicks ?? []} lastRefresh={lastRefresh} />
-
-      <!-- Portfolio -->
-      <PortfolioTable stats={portfolio} />
-
-      <!-- Newsletter -->
-      <NewsletterSignup />
-
-      <!-- Contact CTA -->
-      <section class="contact-cta">
-        <p>
-          Questions about the methodology or a pick? <a href="/contact">Get in touch.</a>
-        </p>
-      </section>
+      <nav aria-label="Site navigation">
+        <div class="nav-links">
+          <a href="/research/">Research</a>
+          <div class="nav-dropdown">
+            <a href="/approach/25-year-hold-thesis/">Investment Approach</a>
+            <div class="nav-dropdown-menu">
+              <a href="/approach/25-year-hold-thesis/">The 25-Year Hold Thesis</a>
+              <a href="/approach/negative-portfolio/">The Negative Portfolio</a>
+            </div>
+          </div>
+        </div>
+      </nav>
     </main>
 
     <Footer />
@@ -69,51 +47,114 @@ const meta = homePageMeta();
 </html>
 
 <style>
-  .page-main {
-    max-width: var(--max-width);
+  body {
+    background-color: #ffffff;
+    color: #1a1a2e;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    max-width: 680px;
     margin: 0 auto;
-    padding: 2rem var(--page-pad) 4rem;
+    padding: 96px 32px 120px;
+    line-height: 1.6;
+    display: block;
+    min-height: unset;
   }
-  .hero {
-    padding: 3rem 0 2rem;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 2rem;
+
+  main {
+    flex: unset;
   }
-  .hero-headline {
-    font-size: clamp(1.5rem, 4vw, 2.125rem);
-    font-weight: 700;
-    line-height: 1.25;
-    letter-spacing: -0.025em;
-    color: var(--text);
-    margin: 0 0 1rem;
+
+  h1 {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 48px;
+    color: #1a3a6b;
+    line-height: 1.3;
   }
-  .hero-sub {
-    font-size: 1.0625rem;
-    color: var(--text-muted);
-    line-height: 1.7;
-    max-width: 600px;
-    margin: 0 0 1.25rem;
+
+  hr {
+    border: none;
+    border-top: 1px solid #d8dae8;
+    margin-bottom: 36px;
   }
-  .hero-link {
-    font-size: 0.9rem;
-    color: var(--accent);
+
+  p {
+    font-size: 0.9375rem;
+    color: #2c2c3e;
+    line-height: 1.8;
+    margin-bottom: 48px;
+    text-wrap: pretty;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nav-links > a,
+  .nav-dropdown > a {
+    color: #1a3a6b;
     text-decoration: none;
+    font-size: 0.875rem;
     font-weight: 500;
+    letter-spacing: 0.01em;
+    display: inline-block;
   }
-  .hero-link:hover {
+
+  .nav-links > a:hover,
+  .nav-dropdown > a:hover {
     text-decoration: underline;
+    text-underline-offset: 3px;
   }
-  .contact-cta {
-    margin-top: 2.5rem;
-    text-align: center;
-    font-size: 0.9rem;
-    color: var(--text-muted);
+
+  .nav-links > a::before,
+  .nav-dropdown > a::before {
+    content: "→\00a0";
+    font-size: 0.75rem;
   }
-  .contact-cta a {
-    color: var(--accent);
+
+  .nav-dropdown {
+    position: relative;
+  }
+
+  .nav-dropdown-menu {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    padding-left: 28px;
+    margin-top: 10px;
+  }
+
+  .nav-dropdown:hover .nav-dropdown-menu,
+  .nav-dropdown:focus-within .nav-dropdown-menu {
+    display: flex;
+  }
+
+  .nav-dropdown-menu a {
+    color: #4a5a7a;
     text-decoration: none;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    display: inline-block;
   }
-  .contact-cta a:hover {
+
+  .nav-dropdown-menu a:hover {
     text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .nav-dropdown-menu a::before {
+    content: "→\00a0";
+    font-size: 0.7rem;
+  }
+
+  /* Footer sits below the body content */
+  :global(.site-footer) {
+    max-width: 680px;
+    margin: 0 auto;
+    padding-left: 32px;
+    padding-right: 32px;
   }
 </style>

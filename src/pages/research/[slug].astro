@@ -1,0 +1,153 @@
+---
+export const prerender = true;
+
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import SEOHead from "../../components/SEOHead.astro";
+import { researchArticleMeta } from "../../lib/seo/meta.js";
+import { researchArticles } from "../../content/research.js";
+import "../../styles/global.css";
+
+export function getStaticPaths() {
+  return researchArticles.map((article) => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const meta = researchArticleMeta(article);
+
+// Related articles: up to 3 others, excluding current
+const related = researchArticles.filter((a) => a.slug !== article.slug).slice(0, 3);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEOHead meta={meta} />
+  </head>
+  <body>
+    <Header breadcrumbs={[
+      { label: "Home", href: "/" },
+      { label: "Research", href: "/research/" },
+      { label: article.title },
+    ]} />
+
+    <main class="page-main">
+      <article class="research-article">
+        <header class="article-header">
+          <h1>{article.title}</h1>
+          <p class="article-desc">{article.description}</p>
+        </header>
+
+        <div class="prose">
+          {article.sections.map((section) => (
+            <section class="prose-section">
+              <h2>{section.heading}</h2>
+              {section.body.split("\n\n").map((para) => (
+                <p>{para}</p>
+              ))}
+            </section>
+          ))}
+        </div>
+
+        {related.length > 0 && (
+          <aside class="related">
+            <h3>Related research</h3>
+            <ul>
+              {related.map((r) => (
+                <li>
+                  <a href={`/research/${r.slug}/`}>→&nbsp;{r.title}</a>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )}
+      </article>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .page-main {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2rem var(--page-pad) 4rem;
+  }
+  .research-article {
+    max-width: 680px;
+  }
+  .article-header {
+    padding: 2rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+  }
+  .article-header h1 {
+    font-size: clamp(1.375rem, 4vw, 1.875rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.75rem;
+    color: var(--text);
+  }
+  .article-desc {
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .prose {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .prose-section {
+    margin-bottom: 2.25rem;
+  }
+  .prose-section h2 {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 0.875rem;
+    letter-spacing: -0.01em;
+  }
+  .prose-section p {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin: 0 0 0.875rem;
+  }
+  .prose-section p:last-child {
+    margin-bottom: 0;
+  }
+  .related {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .related h3 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+  .related ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .related a {
+    font-size: 0.875rem;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .related a:hover {
+    text-decoration: underline;
+  }
+</style>
