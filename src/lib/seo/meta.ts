@@ -285,7 +285,7 @@ export function ledger5YearMeta(): PageMeta {
   return {
     title: "The 5-Year Ledger — The Holding Period",
     description:
-      "A five-year holding-period audit trail, recorded separately from the systematic research lane. Not a recommendation.",
+      "A five-year holding-period audit trail. Not a recommendation.",
     canonical: `${SITE_URL}/ledger/5-year/`,
     ogImage: DEFAULT_OG_IMAGE,
     ogType: "website",

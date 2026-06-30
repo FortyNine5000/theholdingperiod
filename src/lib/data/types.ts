@@ -15,7 +15,7 @@ export interface PickStats {
   cagr: number | null; // null if position age < 365 days
   benchmarkReturn: number; // ^SP500TR over same window
   alpha: number; // cumReturn - benchmarkReturn (decimal)
-  evidenceLabel?: string; // e.g. "Best Shot - Exception"; surfaced on the ledger row
+  evidenceLabel?: string; // optional short label surfaced on the ledger row
   // Chart data (indexed from entry date, normalised to 100)
   chartDates: string[];
   chartPickValues: number[];
