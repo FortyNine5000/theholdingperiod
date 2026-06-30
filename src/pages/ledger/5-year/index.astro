@@ -4,14 +4,13 @@ export const prerender = true;
 import Header from "../../../components/Header.astro";
 import Footer from "../../../components/Footer.astro";
 import SEOHead from "../../../components/SEOHead.astro";
-import { ledger5YearPersonalMeta } from "../../../lib/seo/meta.js";
+import { ledger5YearMeta } from "../../../lib/seo/meta.js";
 import "../../../styles/global.css";
 
-const meta = ledger5YearPersonalMeta();
+const meta = ledger5YearMeta();
 
-// Doug's personal five-year holding-period decisions. Recorded as a static
-// audit trail — these are not computed against live market data and are not a
-// recommendation. Benchmark entry value is left Pending until source-backed.
+// Five-year holding-period decisions, recorded as a static audit trail.
+// Not a recommendation.
 const rows = [
   {
     quarter: "2026 Q2",
@@ -20,8 +19,6 @@ const rows = [
     entryDate: "2026-06-10",
     entryPrice: "$358.10",
     plannedExit: "2031-06-10",
-    label: "Personal pick",
-    benchmark: "Pending",
   },
 ];
 ---
@@ -35,23 +32,19 @@ const rows = [
     <Header breadcrumbs={[
       { label: "Home", href: "/" },
       { label: "Public Ledgers", href: "/ledger/" },
-      { label: "Doug's 5-Year Ledger" },
+      { label: "The 5-Year Ledger" },
     ]} />
 
     <main class="page-main">
       <div class="ledger-intro">
-        <h1>Doug's 5-Year Personal Ledger</h1>
+        <h1>The 5-Year Ledger</h1>
         <p>
-          This ledger records Doug's personal five-year holding-period decisions. It is a personal
-          audit trail, not a recommendation. Each entry records the ticker, the entry date and
-          price, the planned five-year exit, and the evidence label it carried when it was named.
-          It is kept separate from the systematic five-year research lane described on the approach
-          page.
+          This ledger records five-year holding-period decisions as an audit trail. Each entry
+          records the ticker, the entry date and price, and the planned five-year exit. It is kept
+          separate from the systematic five-year research lane described on the approach page.
         </p>
         <p class="ledger-note">
-          Not investment advice. The benchmark is the S&amp;P 500 Total Return index
-          (<code>^SP500TR</code>); benchmark entry values are shown as Pending until a source-backed
-          value is captured. Nothing here should be read as a recommendation to buy or sell any
+          Not investment advice. Nothing here should be read as a recommendation to buy or sell any
           security.
         </p>
       </div>
@@ -67,8 +60,6 @@ const rows = [
                 <th>Entry Date</th>
                 <th class="num">Entry Price</th>
                 <th>Planned Exit</th>
-                <th>Label</th>
-                <th class="num">S&amp;P 500 TR (entry)</th>
               </tr>
             </thead>
             <tbody>
@@ -80,8 +71,6 @@ const rows = [
                   <td>{r.entryDate}</td>
                   <td class="num">{r.entryPrice}</td>
                   <td>{r.plannedExit}</td>
-                  <td class="muted">{r.label}</td>
-                  <td class="num muted">{r.benchmark}</td>
                 </tr>
               ))}
             </tbody>
@@ -100,8 +89,6 @@ const rows = [
                 <div><dt>Entry date</dt><dd>{r.entryDate}</dd></div>
                 <div><dt>Entry price</dt><dd>{r.entryPrice}</dd></div>
                 <div><dt>Planned exit</dt><dd>{r.plannedExit}</dd></div>
-                <div><dt>Label</dt><dd>{r.label}</dd></div>
-                <div><dt>S&amp;P 500 TR (entry)</dt><dd>{r.benchmark}</dd></div>
               </dl>
             </div>
           ))}
@@ -150,7 +137,7 @@ const rows = [
     width: 100%;
     border-collapse: collapse;
     font-size: 0.875rem;
-    min-width: 640px;
+    min-width: 560px;
   }
   .data-table thead th {
     padding: 0.625rem 0.875rem;
@@ -183,7 +170,6 @@ const rows = [
     color: var(--text-muted);
     font-size: 0.8125rem;
   }
-  .muted { color: var(--text-muted); }
 
   .mobile-only { display: none; }
   @media (max-width: 680px) {

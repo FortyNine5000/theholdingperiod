@@ -254,7 +254,7 @@ export function ledgerIndexMeta(): PageMeta {
   return {
     title: "Public Ledgers — The Holding Period",
     description:
-      "The ledgers are audit trails, not the product. The 25-year public experiment and Doug's personal five-year ledger, each recording what was named, when, and at what price.",
+      "The ledgers are audit trails, not the product. The 25-year public experiment and the five-year ledger, each recording what was named, when, and at what price.",
     canonical: `${SITE_URL}/ledger/`,
     ogImage: DEFAULT_OG_IMAGE,
     ogType: "website",
@@ -281,18 +281,18 @@ export function ledger25YearMeta(): PageMeta {
   };
 }
 
-export function ledger5YearPersonalMeta(): PageMeta {
+export function ledger5YearMeta(): PageMeta {
   return {
-    title: "Doug's 5-Year Personal Ledger — The Holding Period",
+    title: "The 5-Year Ledger — The Holding Period",
     description:
-      "A personal audit trail of Doug's five-year holding-period decisions, recorded separately from the systematic research lane. Not a recommendation.",
-    canonical: `${SITE_URL}/ledger/5-year-personal/`,
+      "A five-year holding-period audit trail, recorded separately from the systematic research lane. Not a recommendation.",
+    canonical: `${SITE_URL}/ledger/5-year/`,
     ogImage: DEFAULT_OG_IMAGE,
     ogType: "website",
     breadcrumbs: [
       { name: "Home", url: SITE_URL },
       { name: "Public Ledgers", url: `${SITE_URL}/ledger/` },
-      { name: "Doug's 5-Year Ledger" },
+      { name: "The 5-Year Ledger" },
     ],
   };
 }

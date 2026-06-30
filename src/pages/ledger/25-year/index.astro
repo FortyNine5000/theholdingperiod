@@ -8,6 +8,8 @@ import PicksTable from "../../../components/PicksTable.astro";
 import PortfolioTable from "../../../components/PortfolioTable.astro";
 import { ledger25YearMeta } from "../../../lib/seo/meta.js";
 import { getComputedPicks, getComputedPortfolio, getLastRefresh } from "../../../lib/store.js";
+import { picks } from "../../../content/picks.js";
+import type { PickStats } from "../../../lib/data/types.js";
 import "../../../styles/global.css";
 
 const kv = Astro.locals.runtime.env.HOLDING_PERIOD_KV;
@@ -19,6 +21,38 @@ const [computedPicks, portfolio, lastRefresh] = await Promise.all([
 ]);
 
 const meta = ledger25YearMeta();
+
+// Render the canonical roster in order. Use the live KV-computed stats when
+// present; for a name entered since the last daily refresh (e.g. a brand-new
+// quarterly name with a recorded entry), synthesize the row from its recorded
+// entry so it appears on the ledger immediately. The S&P 500 TR benchmark is
+// taken at the entry date (today's open for a same-day entry), so a freshly
+// entered name starts at 0% until the next daily close updates it.
+const computedById = new Map((computedPicks ?? []).map((s) => [s.id, s]));
+const displayPicks: PickStats[] = picks.flatMap((p) => {
+  const live = computedById.get(p.id);
+  if (live) return [live];
+  if (!p.entryOverride) return [];
+  return [
+    {
+      id: p.id,
+      ticker: p.ticker,
+      companyName: p.companyName,
+      quarterLabel: p.quarterLabel,
+      entryDate: p.entryOverride.date,
+      entryPrice: p.entryOverride.price,
+      currentPrice: p.entryOverride.price,
+      cumReturn: 0,
+      cagr: null,
+      benchmarkReturn: 0,
+      alpha: 0,
+      evidenceLabel: p.evidenceLabel,
+      chartDates: [],
+      chartPickValues: [],
+      chartBenchmarkValues: [],
+    },
+  ];
+});
 ---
 
 <!doctype html>
@@ -44,11 +78,13 @@ const meta = ledger25YearMeta();
         </p>
         <p class="ledger-note">
           The public ledger is the audit trail, not a model portfolio. It is not investment
-          advice. Nothing here should be read as a recommendation to buy or sell any security.
+          advice. Nothing here should be read as a recommendation to buy or sell any security. A
+          newly entered name shows its recorded entry immediately; live performance and the
+          S&amp;P 500 TR comparison begin updating at the next daily close.
         </p>
       </div>
 
-      <PicksTable picks={computedPicks ?? []} lastRefresh={lastRefresh} />
+      <PicksTable picks={displayPicks} lastRefresh={lastRefresh} />
       <PortfolioTable stats={portfolio} />
     </main>
 

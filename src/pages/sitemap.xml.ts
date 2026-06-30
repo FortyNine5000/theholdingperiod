@@ -52,7 +52,7 @@ const staticPages: SitemapUrl[] = [
     priority: "0.7",
   },
   {
-    loc: `${SITE_URL}/ledger/5-year-personal/`,
+    loc: `${SITE_URL}/ledger/5-year/`,
     lastmod: buildDate,
     changefreq: "monthly",
     priority: "0.5",
