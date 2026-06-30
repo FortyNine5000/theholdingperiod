@@ -1,24 +1,26 @@
 ---
-export const prerender = false;
+export const prerender = true;
 
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import SEOHead from "../../components/SEOHead.astro";
-import PicksTable from "../../components/PicksTable.astro";
-import PortfolioTable from "../../components/PortfolioTable.astro";
-import { ledgerPageMeta } from "../../lib/seo/meta.js";
-import { getComputedPicks, getComputedPortfolio, getLastRefresh } from "../../lib/store.js";
+import { ledgerIndexMeta } from "../../lib/seo/meta.js";
 import "../../styles/global.css";
 
-const kv = Astro.locals.runtime.env.HOLDING_PERIOD_KV;
+const meta = ledgerIndexMeta();
 
-const [computedPicks, portfolio, lastRefresh] = await Promise.all([
-  getComputedPicks(kv),
-  getComputedPortfolio(kv),
-  getLastRefresh(kv),
-]);
-
-const meta = ledgerPageMeta();
+const ledgers = [
+  {
+    href: "/ledger/25-year/",
+    title: "25-Year Public Ledger",
+    desc: "One public company per quarter, entered for a 25-year hold and tracked against the S&P 500 Total Return index. The public accountability experiment.",
+  },
+  {
+    href: "/ledger/5-year-personal/",
+    title: "Doug's 5-Year Personal Ledger",
+    desc: "A personal audit trail of Doug's five-year holding-period decisions, recorded separately from the systematic research lane. Not a recommendation.",
+  },
+];
 ---
 
 <!doctype html>
@@ -29,23 +31,32 @@ const meta = ledgerPageMeta();
   <body>
     <Header breadcrumbs={[
       { label: "Home", href: "/" },
-      { label: "Public Ledger" },
+      { label: "Public Ledgers" },
     ]} />
 
     <main class="page-main">
-      <div class="ledger-intro">
-        <h1>Public Ledger</h1>
-        <p>
-          The public ledger is not the product. It is the audit trail. Each named stock enters
-          the record for a 25-year hold from the date it is named. The entry price, entry date,
-          and investment case are recorded. Future thesis updates may revise the assessment, but
-          the original name never leaves the record. Drawdowns, mistakes, and underperformance
-          stay visible.
+      <div class="page-header">
+        <h1>Public Ledgers</h1>
+        <p class="page-desc">
+          The ledgers are audit trails. They are not the homepage, the research product, or a
+          recommendation engine. They record what was named, when it was named, and what evidence
+          label it carried at the time.
         </p>
       </div>
 
-      <PicksTable picks={computedPicks ?? []} lastRefresh={lastRefresh} />
-      <PortfolioTable stats={portfolio} />
+      <ul class="ledger-list">
+        {ledgers.map((l) => (
+          <li class="ledger-item">
+            <a href={l.href} class="ledger-link">
+              <div class="ledger-body">
+                <span class="ledger-title">{l.title}</span>
+                <span class="ledger-desc">{l.desc}</span>
+              </div>
+              <span class="ledger-arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))}
+      </ul>
     </main>
 
     <Footer />
@@ -58,22 +69,73 @@ const meta = ledgerPageMeta();
     margin: 0 auto;
     padding: 2rem var(--page-pad) 4rem;
   }
-  .ledger-intro {
-    max-width: 640px;
+  .page-header {
     padding: 2rem 0 2rem;
     border-bottom: 1px solid var(--border);
     margin-bottom: 2rem;
+    max-width: 640px;
   }
-  .ledger-intro h1 {
+  .page-header h1 {
     font-size: 1.75rem;
     font-weight: 700;
     letter-spacing: -0.025em;
     margin-bottom: 0.75rem;
     color: var(--text);
   }
-  .ledger-intro p {
+  .page-desc {
     font-size: 0.9375rem;
     color: var(--text-muted);
-    line-height: 1.75;
+    line-height: 1.7;
+  }
+  .ledger-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: 720px;
+  }
+  .ledger-item {
+    border-bottom: 1px solid var(--border);
+  }
+  .ledger-item:first-child {
+    border-top: 1px solid var(--border);
+  }
+  .ledger-link {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.25rem 0;
+    text-decoration: none;
+    color: inherit;
+  }
+  .ledger-link:hover .ledger-title {
+    color: var(--accent);
+  }
+  .ledger-link:hover {
+    text-decoration: none;
+  }
+  .ledger-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 1;
+  }
+  .ledger-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+    transition: color 0.15s;
+  }
+  .ledger-desc {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .ledger-arrow {
+    font-size: 1rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    margin-top: 0.1rem;
   }
 </style>

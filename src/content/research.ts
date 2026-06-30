@@ -3,16 +3,20 @@ export type ResearchSection = {
   body: string;
 };
 
+export type ResearchGroup = "25-year" | "shared";
+
 export type ResearchArticle = {
   slug: string;
   title: string;
   description: string;
+  group?: ResearchGroup;
   sections: ResearchSection[];
 };
 
 export const researchArticles: ResearchArticle[] = [
   {
     slug: "return-concentration",
+    group: "shared",
     title: "Why the Market's Long-Run Gains Come From a Few Unusual Stocks",
     description:
       "Most stocks underperform cash over the long run. A small number account for essentially all net wealth creation. What the long winners share — and what that means for a 25-year pick.",
@@ -37,6 +41,7 @@ export const researchArticles: ResearchArticle[] = [
   },
   {
     slug: "long-duration-compounder-framework",
+    group: "25-year",
     title: "The Long-Duration Compounder Framework",
     description:
       "What separates a 25-year compounder from a good business with a limited runway. The six non-negotiable traits, the moat hierarchy, and the named decision rules that shape every pick.",
@@ -61,21 +66,30 @@ export const researchArticles: ResearchArticle[] = [
   },
   {
     slug: "subtraction-framework",
-    title: "The Subtraction Framework",
+    group: "shared",
+    title: "Right-Tail Preservation",
     description:
-      "The index guarantees exposure to rare right-tail winners. If predicting those winners in advance is hard, a parallel claim may be more tractable: remove probable wealth destroyers while preserving enough breadth to capture them.",
+      "Also called the Subtraction Framework. The index works because it owns the rare outliers. This research asks whether a broad portfolio can preserve that right-tail exposure while removing businesses structurally unlikely to become long-term wealth creators — and holds every candidate rule to a do-no-harm standard before any exclusion is treated as real.",
     sections: [
+      {
+        heading: "Right-tail preservation, not pessimism",
+        body: "Indexing works because it owns the rare right tail. An investor who held a broad index from 1990 to 2020 captured the handful of companies that accounted for most net wealth creation without having to identify them in advance. Right-Tail Preservation starts from that fact and asks a narrow question: can a broad portfolio keep that outlier exposure while removing a small group of businesses whose observable traits have almost never appeared among the market's great long-run wealth creators?\n\nThis is not an anti-stock, short-oriented, or pessimistic idea, and it is not an attempt to predict the next Apple or Nvidia in advance. The question is the inverse: did the eventual top wealth creators ever display certain observable failure traits before their major compounding period? If they did not, those traits may help define exclusions that improve a broad portfolio without deleting the outcomes that make the index work.",
+      },
       {
         heading: "The base rate case for subtraction",
         body: "The S&P 500 works partly because it guarantees exposure to rare right-tail winners. An investor who held the index from 1990 to 2020 captured the returns of Microsoft, Apple, Amazon, and the other handful of companies that accounted for most net wealth creation — without having to identify them in advance.\n\nIf right-tail selection is genuinely hard, an alternative claim becomes more interesting: can you modestly improve long-run outcomes by removing companies that are likely to destroy capital, without pretending to predict every future winner? The Subtraction Framework is the attempt to answer that question seriously.\n\nThis is not a claim that negative selection always beats concentration. It is a claim that removing high-probability losers is a more tractable task than predicting high-probability winners, and that the two approaches are compatible.",
       },
       {
-        heading: "What the subtraction framework is not",
-        body: "It is not classic stock picking in reverse. It is not a factor strategy dressed in new language. It is not market timing or sector rotation. And it is not a mechanical screen applied without judgment.\n\nThe screens identify candidates for removal. Judgment still determines whether the screen result reflects a genuine deterioration in the business or a temporary accounting artifact. The framework is a starting filter, not a final answer.",
+        heading: "What this research is — and is not",
+        body: "It is not classic stock picking in reverse. It is not a factor strategy dressed in new language. It is not market timing or sector rotation. And it is not a mechanical screen applied without judgment.\n\nThe screens identify candidates for removal. Judgment still determines whether the screen result reflects a genuine deterioration in the business or a temporary accounting artifact. The framework is a starting filter, not a final answer — and no current list of excluded companies is published here.",
       },
       {
-        heading: "The negative screens",
-        body: "Eight screens define the initial removal candidates: deteriorating net income trajectory on a trailing multi-year basis; weak organic growth quality, where revenue growth is driven by acquisition or currency rather than unit economics; declining return on assets over a three-to-five-year window; negative spread between ROIC and estimated WACC; worsening leverage, particularly in cyclical businesses; weak free-cash-flow conversion relative to reported earnings; customer concentration above 30% in a single payer or counterparty; and capital-infusion dependence — businesses that require ongoing external capital to fund operations.\n\nA business that fails two or more screens without a clear temporary explanation moves onto the removal list. A single screen failure with an identifiable cause may be watched rather than removed.",
+        heading: "The right-tail retention audit",
+        body: "Before any screen becomes an exclusion, it must pass a right-tail retention audit. The standard is do-no-harm: a candidate rule is tested against the eventual top wealth creators — ideally the top 10, top 20, top 50, and top 100 — and asked a single question. Would this rule have removed any of them before their main wealth-creation window? A rule that would have excluded Apple, Nvidia, Microsoft, Alphabet, Amazon, Broadcom, Meta, Tesla, Visa, or comparable winners before their payoff cannot be a hard exclusion, no matter how sensible it looks on the losers.\n\nThe first job is not deleting losers. The first job is not deleting the future winners. Until a rule clears that audit it stays a research question, not a validated exclusion. For that reason this page publishes no current exclusion list and treats none of the screens below as a settled rule.",
+      },
+      {
+        heading: "The negative screens as research candidates",
+        body: "Eight screens define the initial removal candidates: deteriorating net income trajectory on a trailing multi-year basis; weak organic growth quality, where revenue growth is driven by acquisition or currency rather than unit economics; declining return on assets over a three-to-five-year window; negative spread between ROIC and estimated WACC; worsening leverage, particularly in cyclical businesses; weak free-cash-flow conversion relative to reported earnings; customer concentration above 30% in a single payer or counterparty; and capital-infusion dependence — businesses that require ongoing external capital to fund operations.\n\nA business that fails two or more screens without a clear temporary explanation becomes a removal candidate for further research — not an automatic exclusion. A single screen failure with an identifiable cause may be watched rather than flagged. Every candidate rule still has to clear the right-tail retention audit before it could ever be treated as real.",
       },
       {
         heading: "The Bessemer Converter",
@@ -85,6 +99,7 @@ export const researchArticles: ResearchArticle[] = [
   },
   {
     slug: "orientation-audit",
+    group: "25-year",
     title: "The Orientation Audit",
     description:
       "A protocol for evaluating whether a business updates its model when the world changes. Three dimensions, one critical rule, and why the pattern matters more than any individual score.",
@@ -109,6 +124,7 @@ export const researchArticles: ResearchArticle[] = [
   },
   {
     slug: "punctuation-event-database",
+    group: "25-year",
     title: "The Punctuation Event Database",
     description:
       "A living record of companies tested by crisis, adaptation, and model revision. The database asks one question: did the organization demonstrate the capacity to destroy and rebuild its own operating model when its prior beliefs proved wrong?",
@@ -129,6 +145,7 @@ export const researchArticles: ResearchArticle[] = [
   },
   {
     slug: "failure-library",
+    group: "shared",
     title: "The Failure Library",
     description:
       "The negative image of the compounder framework. A taxonomy of the 16 ways apparently attractive, high-ROIC businesses become permanent capital mistakes.",
@@ -145,6 +162,7 @@ export const researchArticles: ResearchArticle[] = [
   },
   {
     slug: "no-pick-rule",
+    group: "25-year",
     title: "The No-Pick Rule",
     description:
       "The quarterly cadence is a commitment device, not a quota. If no candidate clears the underwriting bar, the correct name is no name.",
@@ -165,6 +183,7 @@ export const researchArticles: ResearchArticle[] = [
   },
   {
     slug: "drawdown-discipline",
+    group: "25-year",
     title: "Drawdown Discipline",
     description:
       "Holding through drawdowns is not a slogan. It requires distinguishing thesis-preserving drawdowns from thesis-breaking ones before the pain arrives, not during it.",

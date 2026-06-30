@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { picks } from "../content/picks.js";
-import { topics } from "../content/topics.js";
+import { researchArticles } from "../content/research.js";
 import { SITE_URL } from "../lib/config.js";
 
 export const prerender = true;
@@ -22,28 +22,46 @@ const staticPages: SitemapUrl[] = [
     priority: "1.0",
   },
   {
-    loc: `${SITE_URL}/picks/`,
+    loc: `${SITE_URL}/research/`,
     lastmod: buildDate,
-    changefreq: "quarterly",
-    priority: "0.9",
+    changefreq: "weekly",
+    priority: "0.8",
   },
   {
-    loc: `${SITE_URL}/topics/`,
+    loc: `${SITE_URL}/approach/5-year-hold/`,
     lastmod: buildDate,
     changefreq: "monthly",
+    priority: "0.8",
+  },
+  {
+    loc: `${SITE_URL}/approach/25-year-hold-thesis/`,
+    lastmod: buildDate,
+    changefreq: "monthly",
+    priority: "0.8",
+  },
+  {
+    loc: `${SITE_URL}/ledger/`,
+    lastmod: buildDate,
+    changefreq: "monthly",
+    priority: "0.6",
+  },
+  {
+    loc: `${SITE_URL}/ledger/25-year/`,
+    lastmod: buildDate,
+    changefreq: "daily",
     priority: "0.7",
+  },
+  {
+    loc: `${SITE_URL}/ledger/5-year-personal/`,
+    lastmod: buildDate,
+    changefreq: "monthly",
+    priority: "0.5",
   },
   {
     loc: `${SITE_URL}/faq`,
     lastmod: buildDate,
     changefreq: "monthly",
-    priority: "0.7",
-  },
-  {
-    loc: `${SITE_URL}/about`,
-    lastmod: buildDate,
-    changefreq: "monthly",
-    priority: "0.7",
+    priority: "0.5",
   },
   {
     loc: `${SITE_URL}/contact`,
@@ -60,14 +78,14 @@ const pickPages: SitemapUrl[] = picks.map((pick) => ({
   priority: "0.9",
 }));
 
-const topicPages: SitemapUrl[] = topics.map((topic) => ({
-  loc: `${SITE_URL}/topics/${topic.slug}`,
+const researchPages: SitemapUrl[] = researchArticles.map((article) => ({
+  loc: `${SITE_URL}/research/${article.slug}/`,
   lastmod: buildDate,
   changefreq: "monthly",
   priority: "0.6",
 }));
 
-const allUrls = [...staticPages, ...pickPages, ...topicPages];
+const allUrls = [...staticPages, ...pickPages, ...researchPages];
 
 function xml(urls: SitemapUrl[]): string {
   const urlset = urls

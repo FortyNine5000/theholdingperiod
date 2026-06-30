@@ -1,0 +1,258 @@
+---
+export const prerender = true;
+
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import SEOHead from "../../components/SEOHead.astro";
+import { approachPageMeta } from "../../lib/seo/meta.js";
+import "../../styles/global.css";
+
+const meta = approachPageMeta("5-year-hold");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEOHead meta={meta} />
+  </head>
+  <body>
+    <Header breadcrumbs={[
+      { label: "Home", href: "/" },
+      { label: "Investment Approach" },
+      { label: "Hold Period of 5 Years" },
+    ]} />
+
+    <main class="page-main">
+      <article class="prose">
+        <header class="article-header">
+          <h1>Investment Approach: Hold Period of 5 Years</h1>
+          <p class="article-desc">
+            Five years is long enough for business change to become per-share value, and short
+            enough that milestones, return decomposition, and variant perception have to be written
+            down.
+          </p>
+        </header>
+
+        <section class="prose-section">
+          <h2>The question</h2>
+          <p>
+            The five-year lane asks a narrower question than the 25-year experiment: which public
+            companies have a plausible five-year path to materially better per-share value than the
+            market currently discounts? It is the practical research lane — long enough for real
+            business change to show up in the numbers, short enough that the thesis has to name its
+            milestones in advance.
+          </p>
+          <p>
+            This is not trading, and it is not a shorter version of the 25-year scorecard. A
+            five-year winner does not need to survive a quarter century or defend a moat against
+            every future entrant. It needs a specific, observable change in the business — an
+            inflection in demand, margins, or capital intensity — to play out inside the window and
+            to be underwritten before it is consensus.
+          </p>
+        </section>
+
+        <section class="prose-section">
+          <h2>What makes a 5-year winner</h2>
+          <p>
+            The recurring patterns are concrete. S-curve acceleration, where adoption of a product
+            or platform crosses from early to mainstream inside the window. A technology platform
+            shift that re-rates the unit economics of the businesses exposed to it. AI-stack
+            exposure large enough to matter — not a press release, but a measurable share of
+            revenue or capacity tied to a finite-window build-out. A value-chain bottleneck or
+            capacity shortage that the market is slow to price. Operating leverage or a free-cash-flow
+            inflection as fixed-cost investment turns into margin. Underappreciated earnings power.
+            Or temporary controversy obscuring durable economics.
+          </p>
+          <p>
+            None of these is a thesis on its own. Each is a hypothesis that has to survive return
+            decomposition and the return gate below.
+          </p>
+        </section>
+
+        <section class="prose-section">
+          <h2>The return gate</h2>
+          <p>
+            The base case must clear a 10% annualized return hurdle without relying on terminal
+            multiple expansion. A thesis that only works if the market re-rates the multiple is a
+            sentiment bet, not a five-year underwriting case.
+          </p>
+          <p>
+            Return decomposition is required. The expected return has to be separated into its
+            sources — revenue growth, margin change, share-count change, dividend, and any multiple
+            change — and the multiple is held flat or faded in the base case. If the base case is
+            already the consensus expectation, the candidate is not a five-year winner: there is no
+            variant perception to be paid for.
+          </p>
+        </section>
+
+        <section class="prose-section">
+          <h2>Technology and S-curves</h2>
+          <p>
+            Technology exposure is treated as a finite-window research problem, not a theme. The
+            relevant question is where in the stack the durable economics sit and for how long: the
+            distinction between compute, memory and high-bandwidth memory, networking, power and
+            cooling, software incumbents, and applications matters because each has a different
+            S-curve and a different competitive structure.
+          </p>
+          <p>
+            Broad AI exposure is not proof of anything. The discipline is to locate the specific
+            bottleneck or adoption curve a company is levered to, estimate the height and slope of
+            that curve, and ask whether the company's position is defensible for the duration of the
+            window — not forever, but for five years.
+          </p>
+        </section>
+
+        <section class="prose-section">
+          <h2>False inflections</h2>
+          <p>
+            Most five-year theses fail on a false inflection — a change that looks like a durable
+            turn and is not. The recurring traps: the TAM mirage, where a large addressable market is
+            mistaken for a capturable one; pull-forward demand mistaken for sustained adoption; unit
+            economics hidden by growth; platform language without evidence of increasing returns; a
+            margin story without pricing power; and the great-product, bad-stock case, where the
+            product is real but the price already embeds the outcome.
+          </p>
+          <p>
+            Naming the false-inflection risk explicitly, before entry, is part of the underwriting —
+            the same discipline the 25-year lane applies to thesis-break conditions.
+          </p>
+        </section>
+
+        <section class="prose-section">
+          <h2>Pilot discipline</h2>
+          <p>
+            The systematic five-year framework is still in pilot validation. The first pilot
+            scorecards are NVDA, VRT, and MU, with APP fourth — names chosen to stress-test the
+            framework across different parts of the technology stack, not because they are
+            recommendations.
+          </p>
+          <p>
+            No AI/system-selected five-year ledger entry is being published for 2026 Q2. The
+            framework's selection rule must be explicit and the first pilot scorecards complete
+            before any systematic name is recorded. That is a process decision, not a delay.
+          </p>
+          <p>
+            Doug's personal GOOG position belongs to his personal five-year ledger, which is a
+            separate audit trail of personal decisions — not the systematic research lane, and not a
+            recommendation.
+          </p>
+        </section>
+
+        <aside class="related">
+          <h3>Related research</h3>
+          <ul>
+            <li><a href="/research/return-concentration/">→&nbsp;Why the Market's Long-Run Gains Come From a Few Unusual Stocks</a></li>
+            <li><a href="/research/subtraction-framework/">→&nbsp;Right-Tail Preservation</a></li>
+            <li><a href="/approach/25-year-hold-thesis/">→&nbsp;Investment Approach: Hold Period of 25 Years</a></li>
+          </ul>
+        </aside>
+
+        <aside class="ledger-ref">
+          <p>
+            Doug's personal five-year holding-period decisions are recorded as a back-page audit
+            trail, kept separate from the systematic research described here. It is not investment
+            advice.
+          </p>
+          <a href="/ledger/5-year-personal/">Doug's 5-year personal ledger →</a>
+        </aside>
+      </article>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .page-main {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2rem var(--page-pad) 4rem;
+  }
+  .prose {
+    max-width: 680px;
+  }
+  .article-header {
+    padding: 2rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+  }
+  .article-header h1 {
+    font-size: clamp(1.375rem, 4vw, 1.875rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.75rem;
+    color: var(--text);
+  }
+  .article-desc {
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .prose-section {
+    margin-bottom: 2.25rem;
+  }
+  .prose-section h2 {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 0.875rem;
+    letter-spacing: -0.01em;
+  }
+  .prose-section p {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin: 0 0 0.875rem;
+  }
+  .prose-section p:last-child {
+    margin-bottom: 0;
+  }
+  .related {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .related h3 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+  .related ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .related a {
+    font-size: 0.875rem;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .related a:hover {
+    text-decoration: underline;
+  }
+  .ledger-ref {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .ledger-ref p {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+  }
+  .ledger-ref a {
+    font-size: 0.875rem;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .ledger-ref a:hover {
+    text-decoration: underline;
+  }
+</style>

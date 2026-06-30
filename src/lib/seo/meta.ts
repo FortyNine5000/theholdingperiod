@@ -52,9 +52,9 @@ export function breadcrumbSchema(items: BreadcrumbItem[]): Record<string, unknow
 
 export function homePageMeta(): PageMeta {
   return {
-    title: "The Holding Period — Long-Duration Equity Research",
+    title: "The Holding Period — Five-Year Winners, Twenty-Five-Year Experiments",
     description:
-      "A search for what may be worth holding for 25 years, and an attempt to define what is not. Long-duration public equity research built on Bessembinder's return-concentration findings.",
+      "Public equity research for investors underwriting five-year winners and testing what might endure for twenty-five. Holding-period discipline, S-curve investing, and a public ledger as audit trail.",
     canonical: SITE_URL,
     ogImage: DEFAULT_OG_IMAGE,
     ogType: "website",
@@ -66,69 +66,13 @@ export function homePageMeta(): PageMeta {
         url: SITE_URL,
         name: "The Holding Period",
         description:
-          "Long-duration public equity research platform. Quarterly names held 25 years, tracked against the S&P 500 Total Return index.",
+          "Public equity research platform with two horizons: a practical five-year research lane and a 25-year public experiment, each tracked against the S&P 500 Total Return index.",
       },
       {
         "@context": "https://schema.org",
         ...ORGANIZATION,
       },
     ],
-  };
-}
-
-export function aboutPageMeta(): PageMeta {
-  const canonical = `${SITE_URL}/about`;
-  const faqs = [
-    {
-      "@type": "Question",
-      name: "Why a 25-year holding period?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Twenty-five years is long enough that near-term volatility is genuinely irrelevant. The quality of the underlying business — its competitive position, capital allocation discipline, and ability to compound retained earnings — becomes the dominant variable over that horizon.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How are stock returns calculated on The Holding Period?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "All returns are total return: dividends reinvested, splits adjusted. Individual stocks use adjusted close price series. The benchmark is the S&P 500 Total Return index, which assumes dividend reinvestment at the index level.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What is the portfolio model?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "A fixed dollar amount is invested in each quarterly pick on the last trading day of that quarter. The same amount is invested in the S&P 500 Total Return index on the same date. There is no rebalancing — each position is held at its original lot size indefinitely.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Is The Holding Period investment advice?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "No. The Holding Period is a personal investment log published publicly so the results cannot be cherry-picked. Nothing here should be read as a recommendation to buy or sell any security.",
-      },
-    },
-  ];
-
-  return {
-    title: "About — The Holding Period | Long-Term Stock Picks vs S&P 500",
-    description:
-      "The Holding Period is a public log of quarterly stock picks held for 25 years, tracked against the S&P 500 Total Return index. One pick per quarter. No rebalancing. Total return with reinvestment.",
-    canonical,
-    ogImage: DEFAULT_OG_IMAGE,
-    ogType: "website",
-    breadcrumbs: [
-      { name: "Home", url: SITE_URL },
-      { name: "About" },
-    ],
-    jsonLd: {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: faqs,
-    },
   };
 }
 
@@ -173,11 +117,9 @@ export function pickPageMeta(pick: Pick, stats: PickStats | null): PageMeta {
     headline: pick.thesisHeadline,
     datePublished: pick.quarterEnd,
     author: {
-      "@type": "Organization",
       ...ORGANIZATION,
     },
     publisher: {
-      "@type": "Organization",
       ...ORGANIZATION,
     },
     description: pick.metaDescription,
@@ -280,17 +222,17 @@ export function researchArticleMeta(article: ResearchArticle): PageMeta {
 }
 
 export function approachPageMeta(
-  page: "25-year-hold-thesis" | "negative-portfolio"
+  page: "25-year-hold-thesis" | "5-year-hold"
 ): PageMeta {
   const titles = {
-    "25-year-hold-thesis": "The 25-Year Hold Thesis",
-    "negative-portfolio": "The Negative Portfolio",
+    "25-year-hold-thesis": "Investment Approach: Hold Period of 25 Years",
+    "5-year-hold": "Investment Approach: Hold Period of 5 Years",
   };
   const descriptions = {
     "25-year-hold-thesis":
-      "Four filters for 25-year equity selection: Survival, Named Mechanism, Reinvestment Runway, and Underwriting. Plus the No-Pick Rule and Drawdown Discipline.",
-    "negative-portfolio":
-      "The Subtraction Framework and Failure Library: 16 patterns by which apparently durable businesses become permanent capital mistakes.",
+      "The 25-year public experiment: four filters for long-duration equity selection — Survival, Named Mechanism, Reinvestment Runway, and Underwriting — plus the No-Pick Rule and Drawdown Discipline. CPRT is the 2026 Q2 name.",
+    "5-year-hold":
+      "The practical five-year research lane: S-curves and the AI stack, return decomposition, a 10% base-case hurdle without multiple expansion, and false-inflection discipline. Five years for tangible business change.",
   };
   const title = titles[page];
   const canonical = `${SITE_URL}/approach/${page}/`;
@@ -308,17 +250,49 @@ export function approachPageMeta(
   };
 }
 
-export function ledgerPageMeta(): PageMeta {
+export function ledgerIndexMeta(): PageMeta {
   return {
-    title: "Public Ledger — The Holding Period",
+    title: "Public Ledgers — The Holding Period",
     description:
-      "The public record of every quarterly name. The ledger is not the product. It is the audit trail. Every pick tracked against the S&P 500 Total Return index.",
+      "The ledgers are audit trails, not the product. The 25-year public experiment and Doug's personal five-year ledger, each recording what was named, when, and at what price.",
     canonical: `${SITE_URL}/ledger/`,
     ogImage: DEFAULT_OG_IMAGE,
     ogType: "website",
     breadcrumbs: [
       { name: "Home", url: SITE_URL },
-      { name: "Public Ledger" },
+      { name: "Public Ledgers" },
+    ],
+  };
+}
+
+export function ledger25YearMeta(): PageMeta {
+  return {
+    title: "25-Year Public Ledger — The Holding Period",
+    description:
+      "The public record of every quarterly 25-year name. One company per quarter, entered into an append-only ledger and tracked against the S&P 500 Total Return index. The ledger is the audit trail, not the product.",
+    canonical: `${SITE_URL}/ledger/25-year/`,
+    ogImage: DEFAULT_OG_IMAGE,
+    ogType: "website",
+    breadcrumbs: [
+      { name: "Home", url: SITE_URL },
+      { name: "Public Ledgers", url: `${SITE_URL}/ledger/` },
+      { name: "25-Year Public Ledger" },
+    ],
+  };
+}
+
+export function ledger5YearPersonalMeta(): PageMeta {
+  return {
+    title: "Doug's 5-Year Personal Ledger — The Holding Period",
+    description:
+      "A personal audit trail of Doug's five-year holding-period decisions, recorded separately from the systematic research lane. Not a recommendation.",
+    canonical: `${SITE_URL}/ledger/5-year-personal/`,
+    ogImage: DEFAULT_OG_IMAGE,
+    ogType: "website",
+    breadcrumbs: [
+      { name: "Home", url: SITE_URL },
+      { name: "Public Ledgers", url: `${SITE_URL}/ledger/` },
+      { name: "Doug's 5-Year Ledger" },
     ],
   };
 }

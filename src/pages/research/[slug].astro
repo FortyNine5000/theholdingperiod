@@ -18,8 +18,14 @@ export function getStaticPaths() {
 const { article } = Astro.props;
 const meta = researchArticleMeta(article);
 
-// Related articles: up to 3 others, excluding current
-const related = researchArticles.filter((a) => a.slug !== article.slug).slice(0, 3);
+// Related articles: up to 3 others, preferring the same horizon group, excluding current
+const sameGroup = researchArticles.filter(
+  (a) => a.slug !== article.slug && a.group === article.group
+);
+const otherGroup = researchArticles.filter(
+  (a) => a.slug !== article.slug && a.group !== article.group
+);
+const related = [...sameGroup, ...otherGroup].slice(0, 3);
 ---
 
 <!doctype html>

@@ -58,6 +58,9 @@ function fmtDate(iso: string): string {
             <td class="quarter">{pick.quarterLabel}</td>
             <td class="ticker">
               <a href={`/picks/${pick.id}`}>{pick.ticker}</a>
+              {pick.evidenceLabel && (
+                <span class="evidence-label">{pick.evidenceLabel}</span>
+              )}
             </td>
             <td>{fmtDate(pick.entryDate)}</td>
             <td class="num">{fmtPrice(pick.entryPrice)}</td>
@@ -96,6 +99,9 @@ function fmtDate(iso: string): string {
           <span class="card-ticker">{pick.ticker}</span>
           <span class="card-quarter">{pick.quarterLabel}</span>
         </div>
+        {pick.evidenceLabel && (
+          <span class="card-evidence">{pick.evidenceLabel}</span>
+        )}
         <div class="card-stats">
           <div class="card-stat">
             <span class="card-stat-label">Return</span>
@@ -199,6 +205,15 @@ function fmtDate(iso: string): string {
     color: var(--text-muted);
     font-size: 0.8125rem;
   }
+  .evidence-label {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
   .positive { color: var(--green); }
   .negative { color: var(--red); }
   .suppressed {
@@ -258,6 +273,13 @@ function fmtDate(iso: string): string {
     }
     .card-quarter {
       font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .card-evidence {
+      display: block;
+      margin: -0.4rem 0 0.6rem;
+      font-size: 0.6875rem;
+      font-weight: 500;
       color: var(--text-muted);
     }
     .card-stats {

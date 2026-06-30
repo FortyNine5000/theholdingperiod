@@ -20,23 +20,22 @@ const meta = homePageMeta();
 
     <main>
       <p>
-        Most stocks do not create lasting wealth. Hendrik Bessembinder's research shows that over
-        long periods, more than half of public companies have negative lifetime returns, while a
-        very small number of exceptional businesses drive nearly all market wealth creation. The
-        Holding Period is a search for what may be worth holding for 25 years and an attempt to
-        define what is not.
+        Most stocks do not create lasting wealth. A small minority of public companies drives the
+        long-run market, but finding them is only half the problem. The other half is behavioral:
+        buying with one time frame, judging with another, and selling when price movement
+        overwhelms the original thesis.
+      </p>
+
+      <p>
+        The Holding Period starts by fixing the clock: five years for tangible business change,
+        twenty-five years for the more extreme test of survival, adaptability, and compounding.
       </p>
 
       <nav aria-label="Site navigation">
         <div class="nav-links">
           <a href="/research/">Research</a>
-          <div class="nav-dropdown">
-            <a href="/approach/25-year-hold-thesis/">Investment Approach</a>
-            <div class="nav-dropdown-menu">
-              <a href="/approach/25-year-hold-thesis/">The 25-Year Hold Thesis</a>
-              <a href="/approach/negative-portfolio/">The Negative Portfolio</a>
-            </div>
-          </div>
+          <a href="/approach/5-year-hold/">Investment Approach: Hold Period of 5 Years</a>
+          <a href="/approach/25-year-hold-thesis/">Investment Approach: Hold Period of 25 Years</a>
         </div>
       </nav>
     </main>
@@ -56,18 +55,21 @@ const meta = homePageMeta();
     font-size: 0.9375rem;
     color: #2c2c3e;
     line-height: 1.8;
-    margin-bottom: 48px;
+    margin-bottom: 24px;
     text-wrap: pretty;
+  }
+
+  p:last-of-type {
+    margin-bottom: 48px;
   }
 
   .nav-links {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
   }
 
-  .nav-links > a,
-  .nav-dropdown > a {
+  .nav-links > a {
     color: #1a3a6b;
     text-decoration: none;
     font-size: 0.875rem;
@@ -76,50 +78,13 @@ const meta = homePageMeta();
     display: inline-block;
   }
 
-  .nav-links > a:hover,
-  .nav-dropdown > a:hover {
+  .nav-links > a:hover {
     text-decoration: underline;
     text-underline-offset: 3px;
   }
 
-  .nav-links > a::before,
-  .nav-dropdown > a::before {
+  .nav-links > a::before {
     content: "→\00a0";
     font-size: 0.75rem;
-  }
-
-  .nav-dropdown {
-    position: relative;
-  }
-
-  .nav-dropdown-menu {
-    display: none;
-    flex-direction: column;
-    gap: 8px;
-    padding-left: 28px;
-    margin-top: 10px;
-  }
-
-  .nav-dropdown:hover .nav-dropdown-menu,
-  .nav-dropdown:focus-within .nav-dropdown-menu {
-    display: flex;
-  }
-
-  .nav-dropdown-menu a {
-    color: #4a5a7a;
-    text-decoration: none;
-    font-size: 0.8125rem;
-    font-weight: 400;
-    display: inline-block;
-  }
-
-  .nav-dropdown-menu a:hover {
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-
-  .nav-dropdown-menu a::before {
-    content: "→\00a0";
-    font-size: 0.7rem;
   }
 </style>

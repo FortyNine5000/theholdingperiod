@@ -1,0 +1,239 @@
+---
+export const prerender = true;
+
+import Header from "../../../components/Header.astro";
+import Footer from "../../../components/Footer.astro";
+import SEOHead from "../../../components/SEOHead.astro";
+import { ledger5YearPersonalMeta } from "../../../lib/seo/meta.js";
+import "../../../styles/global.css";
+
+const meta = ledger5YearPersonalMeta();
+
+// Doug's personal five-year holding-period decisions. Recorded as a static
+// audit trail — these are not computed against live market data and are not a
+// recommendation. Benchmark entry value is left Pending until source-backed.
+const rows = [
+  {
+    quarter: "2026 Q2",
+    ticker: "GOOG",
+    company: "Alphabet Inc.",
+    entryDate: "2026-06-10",
+    entryPrice: "$358.10",
+    plannedExit: "2031-06-10",
+    label: "Personal pick",
+    benchmark: "Pending",
+  },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEOHead meta={meta} />
+  </head>
+  <body>
+    <Header breadcrumbs={[
+      { label: "Home", href: "/" },
+      { label: "Public Ledgers", href: "/ledger/" },
+      { label: "Doug's 5-Year Ledger" },
+    ]} />
+
+    <main class="page-main">
+      <div class="ledger-intro">
+        <h1>Doug's 5-Year Personal Ledger</h1>
+        <p>
+          This ledger records Doug's personal five-year holding-period decisions. It is a personal
+          audit trail, not a recommendation. Each entry records the ticker, the entry date and
+          price, the planned five-year exit, and the evidence label it carried when it was named.
+          It is kept separate from the systematic five-year research lane described on the approach
+          page.
+        </p>
+        <p class="ledger-note">
+          Not investment advice. The benchmark is the S&amp;P 500 Total Return index
+          (<code>^SP500TR</code>); benchmark entry values are shown as Pending until a source-backed
+          value is captured. Nothing here should be read as a recommendation to buy or sell any
+          security.
+        </p>
+      </div>
+
+      <section class="ledger-table-section">
+        <div class="table-wrapper desktop-only">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Quarter</th>
+                <th>Ticker</th>
+                <th>Company</th>
+                <th>Entry Date</th>
+                <th class="num">Entry Price</th>
+                <th>Planned Exit</th>
+                <th>Label</th>
+                <th class="num">S&amp;P 500 TR (entry)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr>
+                  <td class="quarter">{r.quarter}</td>
+                  <td class="ticker">{r.ticker}</td>
+                  <td>{r.company}</td>
+                  <td>{r.entryDate}</td>
+                  <td class="num">{r.entryPrice}</td>
+                  <td>{r.plannedExit}</td>
+                  <td class="muted">{r.label}</td>
+                  <td class="num muted">{r.benchmark}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cards-list mobile-only">
+          {rows.map((r) => (
+            <div class="ledger-card">
+              <div class="card-header">
+                <span class="card-ticker">{r.ticker}</span>
+                <span class="card-quarter">{r.quarter}</span>
+              </div>
+              <p class="card-company">{r.company}</p>
+              <dl class="card-rows">
+                <div><dt>Entry date</dt><dd>{r.entryDate}</dd></div>
+                <div><dt>Entry price</dt><dd>{r.entryPrice}</dd></div>
+                <div><dt>Planned exit</dt><dd>{r.plannedExit}</dd></div>
+                <div><dt>Label</dt><dd>{r.label}</dd></div>
+                <div><dt>S&amp;P 500 TR (entry)</dt><dd>{r.benchmark}</dd></div>
+              </dl>
+            </div>
+          ))}
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .page-main {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2rem var(--page-pad) 4rem;
+  }
+  .ledger-intro {
+    max-width: 640px;
+    padding: 2rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .ledger-intro h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.75rem;
+    color: var(--text);
+  }
+  .ledger-intro p {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+  }
+  .ledger-note {
+    margin-top: 0.875rem;
+    font-size: 0.8125rem;
+  }
+  .table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    min-width: 640px;
+  }
+  .data-table thead th {
+    padding: 0.625rem 0.875rem;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table th.num,
+  .data-table td.num {
+    text-align: right;
+  }
+  .data-table td {
+    padding: 0.75rem 0.875rem;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+  .ticker {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .quarter {
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+  }
+  .muted { color: var(--text-muted); }
+
+  .mobile-only { display: none; }
+  @media (max-width: 680px) {
+    .desktop-only { display: none; }
+    .mobile-only { display: flex; flex-direction: column; gap: 0.75rem; }
+    .ledger-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem;
+    }
+    .card-header {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+    .card-ticker {
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .card-quarter {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .card-company {
+      margin: 0.25rem 0 0.75rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+    .card-rows {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .card-rows > div {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .card-rows dt {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .card-rows dd {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text);
+      text-align: right;
+    }
+  }
+</style>

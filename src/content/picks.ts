@@ -9,6 +9,12 @@ export interface Pick {
   companyName: string;
   quarterLabel: string;
   quarterEnd: string; // YYYY-MM-DD, last calendar day of quarter
+  // Optional explicit entry override: an actual recorded trade (date + price).
+  // When present, the ledger uses this verbatim instead of resolving the entry
+  // from the price series. Benchmark return is still computed from ^SP500TR.
+  entryOverride?: { date: string; price: number };
+  // Optional evidence label shown on the ledger row, e.g. "Best Shot - Exception".
+  evidenceLabel?: string;
   thesisHeadline: string;
   thesisIntro: string;
   thesisSections: ThesisSection[];
@@ -132,6 +138,44 @@ export const picks: Pick[] = [
       "DBS is embodied in institutional culture and key leaders. Culture drift at the top — a new management team that abandons the operating discipline or chases revenue scale over returns — is the primary risk, and the one that cannot be hedged. A second scenario: a large acquisition at a premium multiple in a tangentially related business that fails to absorb DBS, destroying capital rather than compounding it. The life sciences tools sector also carries biotech funding cycle risk — instruments are capital expenditure, and biopharma customers cut capex in downturns. Over 25 years, multiple cycles are guaranteed; the question is whether the balance sheet and recurring consumable base are resilient enough to weather them without permanent impairment.",
     whatToWatch:
       "Core revenue growth ex-COVID (the clearest signal that normalized demand has fully returned), bioprocessing order trends at Cytiva and Pall (the highest-value segment), gross margin trajectory (DBS should be expanding margins at acquisitions over a 3–5 year horizon), and ROIC on recent acquisitions (the acid test of whether DBS is actually working). If DBS attrition becomes visible — organic growth slipping below 4%, margins flat despite volume recovery — that is the signal to reassess.",
+  },
+  {
+    id: "cprt-2026-q2",
+    ticker: "CPRT",
+    companyName: "Copart, Inc.",
+    quarterLabel: "2026 Q2",
+    quarterEnd: "2026-06-30",
+    entryOverride: { date: "2026-06-30", price: 28.15 },
+    evidenceLabel: "Best Shot - Exception",
+    pageTitle: "Copart (CPRT) — 2026 Q2 Pick | The Holding Period",
+    metaDescription:
+      "Copart (CPRT) is The Holding Period's 2026 Q2 25-year public experiment name, entered at $28.15 on 2026-06-30 and labeled Best Shot - Exception. A 25-year thesis on salvage-auction network density and physical-yard scarcity, with the free-cash-flow underwriting gate recorded as the exception.",
+    ogHeadline: "CPRT — 2026 Q2 | The Holding Period",
+    thesisHeadline: "The Marketplace Built on Land Nobody Else Can Permit",
+    thesisIntro:
+      "Copart runs the largest online marketplace for salvage and total-loss vehicles in the United States, with operations across the United Kingdom, Germany, and other international markets. It sits between two parties: insurance companies that need to dispose of vehicles they have written off, and a global base of dismantlers, rebuilders, dealers, and exporters who bid for them through Copart's online auction platform. This is the 2026 Q2 25-year public experiment name, and it enters the ledger as a Best Shot - Exception: the business-quality case clears strongly, but the strict free-cash-flow underwriting gate does not cleanly clear at entry. The ledger records that distinction rather than softening it.",
+    thesisSections: [
+      {
+        heading: "Network density and the two-sided marketplace",
+        body: "Copart's core asset is liquidity. Insurers route total-loss vehicles to the venue that returns the most money, fastest, with the least administrative friction. Buyers go where the supply is. Each side reinforces the other: more buyer demand raises recovery values for sellers, which attracts more seller volume, which in turn attracts more buyers. That is a genuine two-sided network effect, and it is most of the reason the salvage-auction market has consolidated into a small number of scaled players rather than fragmenting.\n\nThe move from physical, in-person salvage auctions to an online bidding platform widened the buyer pool from a local yard's regulars to a national and international audience. A flooded sedan in one state can be bought by an exporter on another continent. Widening the demand side is precisely what raises clearing prices, and higher recovery rates are what keep insurer relationships sticky.",
+      },
+      {
+        heading: "Land as a moat",
+        body: "Unlike an asset-light marketplace, Copart owns much of the land its operations sit on — hundreds of salvage yards positioned near population centers and along the paths of recurring catastrophe events. This is deliberate. Salvage yards are difficult to permit: they are noisy, occasionally hazardous, and rarely welcomed by neighbors or zoning boards. A well-capitalized competitor with a better website cannot conjure permitted acreage near the cities where vehicles are totaled.\n\nThat physical density is the kind of moat that sits near the top of the hierarchy: it required decades of capital deployment to assemble, it compounds with the network effect, and it cannot be replicated quickly even by a competitor willing to spend. It also provides surge capacity. When a hurricane or flood totals tens of thousands of vehicles in a region within days, the ability to physically absorb, store, and process that inrush is a service insurers cannot easily source elsewhere.",
+      },
+      {
+        heading: "A balance sheet built for stress, and a secular tailwind",
+        body: "Copart has long operated with a net-cash balance sheet — an unusual posture for an asset-heavy, land-owning business, and exactly the kind of survival-first characteristic a 25-year holder wants. It is not dependent on external capital to fund operations or to weather a downturn, and it is not carrying a fragile maturity wall.\n\nThe demand backdrop has a secular component worth naming carefully. As vehicles incorporate more sensors, cameras, and advanced driver-assistance hardware, the cost to repair even moderate damage rises, which pushes more accident-damaged vehicles past the threshold where insurers declare a total loss rather than repair. A rising total-loss frequency feeds Copart's volume independent of how many accidents occur. This is a tailwind, not a guarantee, and it must be held alongside the genuine 25-year question below.",
+      },
+      {
+        heading: "Why this is a Best Shot, and why it carries an Exception",
+        body: "The quality work clears: a named network-and-density mechanism, a land moat that is hard to permit around, a net-cash balance sheet, service-heavy economics, and a founder-shaped capital-allocation culture. What does not cleanly clear is the underwriting gate. At the June 22, 2026 scorecard close near $29.48, the base-case 25-year IRR was approximately 8.1% on earnings per share and approximately 7.4% on free cash flow per share. The process requires both the EPS-per-share and the free-cash-flow-per-share base cases to clear an 8% hurdle independently; the FCF/share case did not.\n\nThe June 30 entry at $28.15 is below that scorecard anchor, which mechanically improves the rough return read. But a lower entry price does not, by itself, convert the name from Exception to a clean clearance — that would require a full model refresh, not a price move. Recording CPRT as a Best Shot - Exception is the honest representation: a high-quality business named at a price where the cash-flow math is close but not comfortably clear, entered into the public ledger with that caveat attached rather than removed.",
+      },
+    ],
+    whatWouldMakeWrong:
+      "The clearest 25-year risk is a structural decline in total-loss volume: a sustained fall in accident frequency from widespread driver-assistance and, eventually, autonomous driving could shrink the pool of salvage vehicles faster than rising total-loss severity expands it. A second risk is insurer disintermediation — large insurers building or mandating captive disposal channels that route volume around the marketplace. A third is a credible competitor achieving comparable density and liquidity, compressing the economics on both sides. And as with any founder-shaped business, a capital-allocation culture that drifts toward scale or reported earnings over returns on incremental capital would erode the thesis quietly before it showed up in the numbers.",
+    whatToWatch:
+      "Free-cash-flow conversion relative to reported earnings — this is the metric the Exception label hinges on, and the one whose improvement could eventually retire it. Alongside it: insurer assignment volume and any shift in the mix of insurer relationships, total-loss frequency trends, international unit economics as the non-US footprint scales, and the pace and returns of land and yard expansion. A persistent gap between reported earnings and free cash flow, or evidence that incremental capital is earning less than the legacy base, would be the signal to reassess rather than wait.",
   },
 ];
 

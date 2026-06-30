@@ -9,6 +9,9 @@ import { researchArticles } from "../../content/research.js";
 import "../../styles/global.css";
 
 const meta = researchIndexMeta();
+
+const twentyFive = researchArticles.filter((a) => a.group === "25-year");
+const shared = researchArticles.filter((a) => a.group === "shared");
 ---
 
 <!doctype html>
@@ -24,23 +27,72 @@ const meta = researchIndexMeta();
         <h1>Research</h1>
         <p class="page-desc">
           Frameworks, company studies, and evidence files for long-duration public equity
-          research. The archive is meant to compound.
+          research, grouped by horizon. The archive is meant to compound.
         </p>
       </div>
 
-      <ul class="article-list">
-        {researchArticles.map((article) => (
+      <section class="research-group">
+        <h2 class="group-title">Five-Year Winners</h2>
+        <p class="group-intro">
+          The practical research lane: measurable five-year business change, underwritten before it
+          is consensus.
+        </p>
+        <ul class="article-list">
           <li class="article-item">
-            <a href={`/research/${article.slug}/`} class="article-link">
+            <a href="/approach/5-year-hold/" class="article-link">
               <div class="article-body">
-                <span class="article-title">{article.title}</span>
-                <span class="article-desc">{article.description}</span>
+                <span class="article-title">Investment Approach: Hold Period of 5 Years</span>
+                <span class="article-desc">
+                  S-curves and the AI stack, return decomposition, the 10% base-case hurdle without
+                  multiple expansion, false-inflection discipline, and the pilot scorecard queue
+                  (NVDA, VRT, MU, APP).
+                </span>
               </div>
               <span class="article-arrow" aria-hidden="true">→</span>
             </a>
           </li>
-        ))}
-      </ul>
+        </ul>
+        <p class="group-note">
+          A ranked historical five-year winners table is intentionally not published yet. The data
+          path is unresolved, and a survivor-only ranking would mislead more than it informs.
+          Standalone five-year research files will be added as the framework clears pilot
+          validation.
+        </p>
+      </section>
+
+      <section class="research-group">
+        <h2 class="group-title">Twenty-Five-Year Experiment</h2>
+        <ul class="article-list">
+          {twentyFive.map((article) => (
+            <li class="article-item">
+              <a href={`/research/${article.slug}/`} class="article-link">
+                <div class="article-body">
+                  <span class="article-title">{article.title}</span>
+                  <span class="article-desc">{article.description}</span>
+                </div>
+                <span class="article-arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="research-group">
+        <h2 class="group-title">Shared Base Rates and Failure Work</h2>
+        <ul class="article-list">
+          {shared.map((article) => (
+            <li class="article-item">
+              <a href={`/research/${article.slug}/`} class="article-link">
+                <div class="article-body">
+                  <span class="article-title">{article.title}</span>
+                  <span class="article-desc">{article.description}</span>
+                </div>
+                <span class="article-arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
     </main>
 
     <Footer />
@@ -71,11 +123,34 @@ const meta = researchIndexMeta();
     color: var(--text-muted);
     line-height: 1.7;
   }
+  .research-group {
+    max-width: 720px;
+    margin-bottom: 2.75rem;
+  }
+  .group-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 0.5rem;
+  }
+  .group-intro {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0 0 0.75rem;
+  }
+  .group-note {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0.875rem 0 0;
+  }
   .article-list {
     list-style: none;
     margin: 0;
     padding: 0;
-    max-width: 720px;
   }
   .article-item {
     border-bottom: 1px solid var(--border);

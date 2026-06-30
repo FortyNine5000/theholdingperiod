@@ -1,0 +1,87 @@
+---
+export const prerender = false;
+
+import Header from "../../../components/Header.astro";
+import Footer from "../../../components/Footer.astro";
+import SEOHead from "../../../components/SEOHead.astro";
+import PicksTable from "../../../components/PicksTable.astro";
+import PortfolioTable from "../../../components/PortfolioTable.astro";
+import { ledger25YearMeta } from "../../../lib/seo/meta.js";
+import { getComputedPicks, getComputedPortfolio, getLastRefresh } from "../../../lib/store.js";
+import "../../../styles/global.css";
+
+const kv = Astro.locals.runtime.env.HOLDING_PERIOD_KV;
+
+const [computedPicks, portfolio, lastRefresh] = await Promise.all([
+  getComputedPicks(kv),
+  getComputedPortfolio(kv),
+  getLastRefresh(kv),
+]);
+
+const meta = ledger25YearMeta();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEOHead meta={meta} />
+  </head>
+  <body>
+    <Header breadcrumbs={[
+      { label: "Home", href: "/" },
+      { label: "Public Ledgers", href: "/ledger/" },
+      { label: "25-Year Public Ledger" },
+    ]} />
+
+    <main class="page-main">
+      <div class="ledger-intro">
+        <h1>25-Year Public Ledger</h1>
+        <p>
+          One public company per quarter enters the 25-year experiment. The entry date, entry
+          price, benchmark value, evidence label, and thesis source are recorded so the decision
+          cannot be quietly revised after the fact. Names remain on record for 25 years from the
+          date they are entered — including drawdowns, mistakes, and underperformance.
+        </p>
+        <p class="ledger-note">
+          The public ledger is the audit trail, not a model portfolio. It is not investment
+          advice. Nothing here should be read as a recommendation to buy or sell any security.
+        </p>
+      </div>
+
+      <PicksTable picks={computedPicks ?? []} lastRefresh={lastRefresh} />
+      <PortfolioTable stats={portfolio} />
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .page-main {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2rem var(--page-pad) 4rem;
+  }
+  .ledger-intro {
+    max-width: 640px;
+    padding: 2rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .ledger-intro h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.75rem;
+    color: var(--text);
+  }
+  .ledger-intro p {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+  }
+  .ledger-note {
+    margin-top: 0.875rem;
+    font-size: 0.8125rem;
+  }
+</style>

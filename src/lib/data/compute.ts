@@ -43,13 +43,25 @@ export function computePickStats(
   pickSeries: PriceSeries[],
   benchmarkSeries: PriceSeries[]
 ): PickStats {
-  // Resolve entry date and price (last trading day on or before quarterEnd)
-  const { date: entryDate, price: entryPrice } = resolveEntryDate(
-    pick.quarterEnd,
-    pickSeries
-  );
+  // Resolve entry date and price. If the pick carries an explicit entry
+  // override (an actual recorded trade), use it verbatim so the ledger shows
+  // the real entry rather than an auto-resolved adjusted close. Otherwise fall
+  // back to the last trading day on or before quarterEnd.
+  let entryDate: string;
+  let entryPrice: number;
+  if (pick.entryOverride) {
+    entryDate = pick.entryOverride.date;
+    entryPrice = pick.entryOverride.price;
+  } else {
+    ({ date: entryDate, price: entryPrice } = resolveEntryDate(
+      pick.quarterEnd,
+      pickSeries
+    ));
+  }
+  // Benchmark entry value is always source-backed from the ^SP500TR series,
+  // aligned to the same entry date (override date when present).
   const { price: benchmarkEntryPrice } = resolveEntryDate(
-    pick.quarterEnd,
+    pick.entryOverride ? pick.entryOverride.date : pick.quarterEnd,
     benchmarkSeries
   );
 
@@ -106,6 +118,7 @@ export function computePickStats(
     cagr,
     benchmarkReturn,
     alpha,
+    evidenceLabel: pick.evidenceLabel,
     chartDates,
     chartPickValues,
     chartBenchmarkValues,
@@ -138,12 +151,17 @@ export function computePortfolio(
     let benchmarkEntryPrice: number;
 
     try {
-      ({ date: entryDate, price: entryPrice } = resolveEntryDate(
-        pick.quarterEnd,
-        pickSeries
-      ));
+      if (pick.entryOverride) {
+        entryDate = pick.entryOverride.date;
+        entryPrice = pick.entryOverride.price;
+      } else {
+        ({ date: entryDate, price: entryPrice } = resolveEntryDate(
+          pick.quarterEnd,
+          pickSeries
+        ));
+      }
       ({ price: benchmarkEntryPrice } = resolveEntryDate(
-        pick.quarterEnd,
+        pick.entryOverride ? pick.entryOverride.date : pick.quarterEnd,
         benchmarkSeries
       ));
     } catch {
